@@ -252,7 +252,7 @@
 
     }
 
-//----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     // event.colDef.field
     let rowData = [];
     let contractMpsRowNode;
@@ -353,34 +353,46 @@
 
     const createSalesPlanbtn = document.querySelector("#createSalesPlan");
 
-    let row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
-        itemName: "",
-        itemCode: "",
-        unitOfContract: "EA",
-        stockAmount: "",
-        estimateAmount: "",
-        stockAmountUse: "",
-        RequirementAount: "",
-        stockAmountPlus: "",
-        productionRequirement: "",
-        MPS: "X",
-        Release: "가능",
-
-    };
 
     // 위에서 채크된 row의 값들을 받아오고 재고량은 모달창 띄워서 가져오게
-    //*************여기부터 다시**********************
-    // createSalesPlanbtn.addEventListener("click", () => {
-    //     mpsGridOptions.getSelectedRowData(
-    //         (val)=>{
-    //             row.
-    //         }
-    //     );
-    //
-    //
-    //
-    //     salesPlaneGridOptions.api.updateRowData({add: [row]});  // 여기에 다가 위의 변수들을 넣어준다. 하지만 이 상태에서 견적상세등록 칸에 ag-Grid가 들어가는 건 아니다.
-    //
+    // //*************여기부터 다시**********************
+    createSalesPlanbtn.addEventListener("click", () => {
+
+
+        console.log(mpsGridOptions.getSelectedRowData());
+        (mpsGridOptions.getSelectedRowData()).forEach((val)=>{  //val = 선택한 row하나
+                let row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
+                    itemName: "",
+                    itemCode: "",
+                    unitOfContract: "EA",
+                    stockAmount: "",
+                    estimateAmount: "",
+                    stockAmountUse: "",
+                    RequirementAount: "",
+                    stockAmountPlus: "",
+                    productionRequirement: "",
+                    MPS: "X",
+                    Release: "불가능",
+                    description: ""
+                };
+                console.log(val);
+                console.log(val.contractNo);
+                row.itemName=val.itemName;
+                row.itemCode=val.itemCode;
+                row.stockAmount=val.stockAmountUse;
+                row.estimateAmount=val.estimateAmount;
+                if(val.estimateAmount<val.stockAmount){
+                    row.Release="가능";
+                }
+                salesPlaneGridOptions.api.updateRowData({add: [row]});  // 여기에 다가 위의 변수들을 넣어준다. 하지만 이 상태에서 견적상세등록 칸에 ag-Grid가 들어가는 건 아니다.
+
+            }
+
+        );
+
+    });
+
+
 
 
 
