@@ -54,14 +54,12 @@
                 var endVal = $('#toDate').val();
                 $('#fromDate').data('datepicker').setEndDate(endVal);
             });
-
         });
     </script>
     <style>
         .fromToDate {
             margin-bottom: 7px;
         }
-
         button {
             background-color: #506FA9;
             border: none;
@@ -73,11 +71,9 @@
             border-radius: 3px;
             margin-bottom: 10px;
         }
-
         .ag-header-cell-label {
             justify-content: center;
         }
-
         .ag-cell-value {
             padding-left: 20px;
         }
@@ -121,6 +117,15 @@
 <!-- div>
     <h5>📷 판매 계획</h5>
 </div> -->
+<article class="estimateDetail">
+    <div class="menuButton__selectCode">
+        <button class="search" id="amountList" data-toggle="modal"
+                data-target="#amountModal">수량체크
+        </button>
+    </div>
+    </div>
+    </div>
+</article>
 <article class="salesMpsGrid">
     <div align="center" class="ss">
         <div id="myGrid2" class="ag-theme-balham" style="height:30vh;width:auto;"></div>
@@ -145,21 +150,46 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="amountModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">AMOUNT</h5>
+                <button type="button" class="close" data-dismiss="modal" style="padding-top: 0.5px">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="width:auto; text-align:left">
+                    <label style='font-size: 20px; margin-right: 10px'>견적수량</label>
+                    <input type='text' id='estimateAmountBox'  autocomplete="off"/><br>
+                    <label for='stockAmountUseBox' style='font-size: 20px; margin-right: 10px'>재고사용량</label>
+                    <input type='text' id='stockAmountUseBox'  autocomplete="off"/><br>
+                    <label for='RequirementAmountBox' style='font-size: 20px; margin-right: 10px'>필요생산량</label>
+                    <input type='text' id='RequirementAmountBox' autocomplete="off"/><br>
+                    <label for='stockAmountPlusBox' style='font-size: 20px; margin-right: 10px'>재고보충량</label>
+                    <input type='text' id='stockAmountPlusBox' autocomplete="off"/><br>
+                    <label for='productionRequirementBox' style='font-size: 20px; margin-right: 30px'>총생산량  </label>
+                    <input type="text" id='productionRequirementBox' autocomplete="off"></input>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id ="amountSave" class="btn btn-default" data-dismiss="modal">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     const myGrid = document.querySelector("#myGrid");
     const myGrid2 = document.querySelector("#myGrid2");
     const searchByDateRadio = document.querySelector("#searchByDateRadio");
     const startDatePicker = document.querySelector("#fromDate");
     const endDatePicker = document.querySelector("#toDate");
-
     // 위아래 공통으로 사용하는 column
     // let itemName;
     // let itemCode;
     // let estimateAmount;
     // let stockAount;
-
-
-
     // O customerList Grid
     let mpsColumn = [
         {
@@ -201,23 +231,22 @@
         {headerName: "단위", field: "unitOfContract"},
         {headerName: "비고", field: "description", editable: true, hide: true},
     ];
-
     // ------------------------------------------판매계획 칼럼리스트-------------------------------------------
     let salesPlanColumn = [
-
         {headerName: "품목명", field: "itemName"},
         {headerName: "품목코드", field: "itemCode"},
         {headerName: "단위", field: "unitOfContract"},
         {headerName: "재고량", field: "stockAmount", hide: true},
         {headerName: "견적수량", field: "estimateAmount"},
         {headerName: "재고사용량", field: "stockAmountUse"},
-        {headerName: "필요생산량", field: "RequirementAount"},   //field값 다시 설정
+        {headerName: "필요생산량", field: "RequirementAmount"},   //field값 다시 설정
         {headerName: "재고보충량", field: "stockAmountPlus"},    //field값 다시 설정
         {headerName: "총생산량", field: "productionRequirement"},
         {headerName: "MPS", field: "MPS"},
         {headerName: "납품가능", field: "Release"},
         {headerName: "비고", field: "description", editable: true, hide: true},
     ];
+    let itemRowNode;
     let rowData2=[];
     let salesPlaneGridOptions = {
         defaultColDef: {
@@ -227,7 +256,7 @@
         },
         rowData: rowData2,
         columnDefs: salesPlanColumn,
-        rowSelection: 'multiple',
+        rowSelection: 'single',
         //
         //
         // defaultColDef: {editable: false, resizable : true},
@@ -244,14 +273,23 @@
             console.log(event.data);
             contractMpsRowNode = event;
         },
+        onCellDoubleClicked: (event) => {
+            if (event != undefined) {
+                console.log("IN onRowSelected");
+                let rowNode = estDetailGridOptions.api.getDisplayedRowAtIndex(event.rowIndex);  //getDisplayedRowAtIndex: 보이는 줄의 인덱스 얻기
+                console.log(rowNode);
+                itemRowNode = rowNode;
+            }
+            if (event.colDef.field == "stockAmountUse" || event.colDef.field == "stockAmountPlus") { //     || A OR B
+                amountList.click();
+            }
+        },
         getSelectedRowData() {
             let selectedNodes = this.api.getSelectedNodes();
             let selectedData = selectedNodes.map(node => node.data);
             return selectedData;
         }
-
     }
-
     //----------------------------------------------------------------------
     // event.colDef.field
     let rowData = [];
@@ -263,7 +301,7 @@
             resizable: true,
         },
         columnDefs: mpsColumn,
-        rowSelection: 'multiple',
+        rowSelection: 'single',
         rowData: rowData,
         getRowNodeId: function (data) {
             return data.contractDetailNo;
@@ -292,12 +330,15 @@
             datePicker2: getDatePicker("scheduledEndDate")
         }
     }
-
+    amountList.addEventListener('click', () => {
+        console.log(itemRowNode);
+        if (itemRowNode == undefined) {return;}
+        if (itemRowNode.data.itemCode != undefined) {
+            getstockAmount(itemRowNode.data.itemCode, "EA"); // BOX이면
+        }
+    });
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS 등록가능 수주상세 조회ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-
     const contractCandidateSearchBtn = document.querySelector("#contractCandidateSearchButton");
-
     contractCandidateSearchBtn.addEventListener("click", () => {
         // o contractDate or dueDateOfContract
         let isChecked = document.querySelector("#contractDate").checked
@@ -344,65 +385,51 @@
                 });
             }
         }
-
     });
-
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS 등록 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
     // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS조회 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
     const createSalesPlanbtn = document.querySelector("#createSalesPlan");
-
-
     // 위에서 채크된 row의 값들을 받아오고 재고량은 모달창 띄워서 가져오게
     // //*************여기부터 다시**********************
     createSalesPlanbtn.addEventListener("click", () => {
-
-
         console.log(mpsGridOptions.getSelectedRowData());
+        let row = [];
+        salesPlaneGridOptions.api.setRowData(row);  // 하나만 선택되게 초기화
+
+        row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
+            itemName: "",
+            itemCode: "",
+            unitOfContract: "EA",
+            stockAmount: "",
+            estimateAmount: "",
+            stockAmountUse: "",
+            RequirementAmount: "",
+            stockAmountPlus: "",
+            productionRequirement: "",
+            MPS: "X",
+            Release: "불가능",
+            description: ""
+        };
         (mpsGridOptions.getSelectedRowData()).forEach((val)=>{  //val = 선택한 row하나
-                let row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
-                    itemName: "",
-                    itemCode: "",
-                    unitOfContract: "EA",
-                    stockAmount: "",
-                    estimateAmount: "",
-                    stockAmountUse: "",
-                    RequirementAount: "",
-                    stockAmountPlus: "",
-                    productionRequirement: "",
-                    MPS: "X",
-                    Release: "불가능",
-                    description: ""
-                };
+
                 console.log(val);
                 console.log(val.contractNo);
+                console.log(itemRowNode);
                 row.itemName=val.itemName;
                 row.itemCode=val.itemCode;
-                row.stockAmount=val.stockAmountUse;
+                //row.stockAmountUse=val.stockAmountUse;
                 row.estimateAmount=val.estimateAmount;
                 if(val.estimateAmount<val.stockAmount){
                     row.Release="가능";
                 }
                 salesPlaneGridOptions.api.updateRowData({add: [row]});  // 여기에 다가 위의 변수들을 넣어준다. 하지만 이 상태에서 견적상세등록 칸에 ag-Grid가 들어가는 건 아니다.
-
             }
-
         );
-
     });
-
-
-
-
-
-
     // O getDataPicker
     function getDatePicker(paramFmt) {
         let _this = this;
         _this.fmt = "yyyy-mm-dd";
-
-
         // function to act as a class
         function Datepicker() {
         }
@@ -432,7 +459,6 @@
                 _endDate = contractMpsRowNode.data.dueDateOfContract;
                 console.log(_endDate);
             }
-
             $(this.eInput).datepicker({
                 startDate: _startDate,
                 endDate: _endDate,
@@ -446,25 +472,54 @@
         Datepicker.prototype.getGui = function () {
             return this.eInput;
         };
-
         // focus and select can be done after the gui is attached
         Datepicker.prototype.afterGuiAttached = function () {
             this.eInput.focus();
             console.log(this.eInput.value);
         };
-
         // returns the new value after editing
         Datepicker.prototype.getValue = function () {
             console.log(this.eInput);
             return this.eInput.value;
         };
-
         // any cleanup we need to be done here
         Datepicker.prototype.destroy = function () {
             mpsGridOptions.api.stopEditing();
         };
         return Datepicker;
     }
+    $("#amountModal").on('show.bs.modal', function () {
+        $('#estimateAmountBox').val("");
+        $('#stockAmountUseBox').val("");
+        $('#RequirementAmountBox').val("");
+        $('#stockAmountPlusBox').val("");
+        $('#productionRequirementBox').val("");
+        $('#stockAmountUseBox').on("keyup", function() {  //estimateAmountBox, #unitPriceOfEstimateBox 견적수량과 합계액
+            let sum1 = $('#estimateAmountBox').val() - $('#stockAmountUseBox').val();
+            //sum1에는 견적수량 - 재고사용량, 즉 필요생산량
+            $('#RequirementAmountBox').val(sum1)});
+        $('#stockAmountPlusBox').on("keyup", function() {
+            let sum2 = parseInt($('#stockAmountPlusBox').val()) + parseInt($('#RequirementAmountBox').val());//sum2에는 필요생산량 + 재고보충량, 즉 총 생산량
+            $('#productionRequirementBox').val(sum2);  //  그러면 합계액에는 위의 sum2이 담김
+        });
+    });
+
+    /* $("#amountModal").on('shown.bs.modal', function () {  // 실행하고자 하는 jQuery 코드
+      $('#stockAmountUseBox').focus(); //포커스를 얻었을 때 어떤 행위하기=> 견적수량 칸을 더블클릭해서 모달창이 띄워졌으면 바로 견적수량에 포커스가 위치하게 된다.
+     })*/
+
+    document.querySelector("#amountSave").addEventListener("click", () => {  //modal창 밑에 있는 Save에 걸리는 이벤트
+        if (itemRowNode == undefined) {   return;}
+        estDetailGridOptions.api.stopEditing();
+        itemRowNode.setDataValue("stockAmountUse", $('#stockAmountUseBox').val());
+        itemRowNode.setDataValue("RequirementAmount", $('#RequirementAmountBox').val());
+        itemRowNode.setDataValue("stockAmountPlus", $('#stockAmountPlusBox').val());
+        itemRowNode.setDataValue("productionRequirement", $('#productionRequirementBox').val());
+        let newData = itemRowNode.data; // 바로 위에서 받아온 견적수량,견적단가,합계액의 데이터들이 newData라는 변수명에 담긴다.
+        itemRowNode.setData(newData);  // 그러면 itemRowNode에 set해준다.  그 다음 일괄저장으로 출발
+        console.log(123);
+    })
+
     // O setup the grid after the page has finished loading
     document.addEventListener('DOMContentLoaded', () => {
         new agGrid.Grid(myGrid, mpsGridOptions);
