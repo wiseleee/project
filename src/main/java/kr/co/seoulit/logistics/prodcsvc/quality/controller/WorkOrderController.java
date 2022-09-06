@@ -47,10 +47,11 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder/dialog" , method=RequestMethod.GET)
-	public ModelMap showWorkOrderDialog(
-			@RequestParam("mrpGatheringNoList") String mrpGatheringNoList,
-			@RequestParam("mrpNoList") String mrpNoList
-	) {
+
+	public ModelMap showWorkOrderDialog(@RequestParam("mrpGatheringNoList")String mrpGatheringNoList,
+										@RequestParam("mrpNoList")String mrpNoList) {
+
+
 		map = new ModelMap();
 		try {
 			map = qualityService.getWorkOrderSimulationList(mrpGatheringNoList,mrpNoList);
@@ -63,12 +64,12 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder" , method=RequestMethod.POST)
-	public ModelMap workOrder(
-			@RequestParam("mrpGatheringNo") String mrpGatheringNo,
-			@RequestParam("workPlaceCode") String workPlaceCode,
-			@RequestParam("productionProcess") String productionProcess,
-			@RequestParam("mrpNo") String mrpNo
-	) {
+
+	public ModelMap workOrder(@RequestParam("mrpGatheringNo")String mrpGatheringNo,
+							  @RequestParam("workPlaceCode")String workPlaceCode,
+							  @RequestParam("productionProcess")String productionProcess,
+							  @RequestParam("mrpNo")String mrpNo) {
+		
 
 		map = new ModelMap();
 		try {

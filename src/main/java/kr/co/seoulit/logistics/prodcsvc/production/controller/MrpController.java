@@ -33,13 +33,14 @@ public class MrpController {
 	private static Gson gson = new GsonBuilder().serializeNulls().create();	
 	
 	@RequestMapping(value="/mrp/list", method=RequestMethod.GET)
-	public ModelMap getMrpList(
-			@RequestParam("mrpGatheringStatusCondition") String mrpGatheringStatusCondition,
-			@RequestParam("dateSearchCondition") String dateSearchCondition,
-			@RequestParam("mrpStartDate") String mrpStartDate,
-			@RequestParam("mrpEndDate") String mrpEndDate,
-			@RequestParam("mrpGatheringNo") String mrpGatheringNo
-	) {
+
+	public ModelMap getMrpList(@RequestParam("mrpGatheringStatusCondition")String mrpGatheringStatusCondition,
+							   @RequestParam("dateSearchCondition")String dateSearchCondition,
+							   @RequestParam("mrpStartDate")String mrpStartDate,
+							   @RequestParam("mrpEndDate")String mrpEndDate,
+							   @RequestParam("mrpGatheringNo")String mrpGatheringNo) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<MrpTO> mrpList = null;
@@ -64,10 +65,10 @@ public class MrpController {
 	
 	
 	@RequestMapping(value="/mrp/open", method=RequestMethod.GET)
-	public ModelMap openMrp(
-			@RequestParam("mpsNoListStr") String mpsNoListStr
 
-	) {
+	public ModelMap openMrp(@RequestParam("mpsNoList")String mpsNoListStr) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<String> mpsNoArr = gson.fromJson(mpsNoListStr,
@@ -87,11 +88,11 @@ public class MrpController {
 
 	
 	@RequestMapping(value="/mrp", method=RequestMethod.POST)
-	public ModelMap registerMrp(
-			@RequestParam("batchList") String batchList,
-			@RequestParam("mrpRegisterDate") String mrpRegisterDate
 
-	)  {
+	public ModelMap registerMrp(@RequestParam("batchList")String batchList,
+								@RequestParam("mrpRegisterDate")String mrpRegisterDate) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<String> mpsList = gson.fromJson(batchList, 
@@ -112,9 +113,9 @@ public class MrpController {
 	
 	
 	@RequestMapping(value="/mrp/gathering-list", method=RequestMethod.GET)
-	public ModelMap getMrpGatheringList(
-			@RequestParam("mrpNoList") String mrpNoList
-	) {
+
+	public ModelMap getMrpGatheringList(@RequestParam("mrpNoList")String mrpNoList) {
+
 
 		map = new ModelMap();
 		try {
@@ -136,11 +137,12 @@ public class MrpController {
 	
 
 	@RequestMapping(value="/mrp/gathering", method=RequestMethod.POST)
-	public ModelMap registerMrpGathering(
-			@RequestParam("mrpGatheringRegisterDate") String mrpGatheringRegisterDate,
-			@RequestParam("mrpNoList") String mrpNoList,
-			@RequestParam("mrpNoAndItemCodeList") String mrpNoAndItemCodeList
-	) {
+
+	public ModelMap registerMrpGathering(@RequestParam("mrpGatheringRegisterDate")String mrpGatheringRegisterDate,
+										 @RequestParam("mrpNoList")String mrpNoList,
+										 @RequestParam("mrpNoAndItemCodeList")String mrpNoAndItemCodeList) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<String> mrpNoArr = gson.fromJson(mrpNoList,
@@ -162,11 +164,12 @@ public class MrpController {
 	
 
 	@RequestMapping(value="/mrp/mrpgathering/list", method=RequestMethod.GET)
-	public ModelMap searchMrpGathering(
-			@RequestParam("searchDateCondition") String searchDateCondition,
-			@RequestParam("startDate") String startDate,
-			@RequestParam("endDate") String endDate
-	) {
+
+	public ModelMap searchMrpGathering(@RequestParam("searchDateCondition")String searchDateCondition,
+									   @RequestParam("mrpGatheringStartDate")String startDate,
+									   @RequestParam("mrpGatheringEndDate")String endDate) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<MrpGatheringTO> mrpGatheringList = 
