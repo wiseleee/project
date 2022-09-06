@@ -47,8 +47,10 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder/dialog" , method=RequestMethod.GET)
+
 	public ModelMap showWorkOrderDialog(@RequestParam("mrpGatheringNoList")String mrpGatheringNoList,
 										@RequestParam("mrpNoList")String mrpNoList) {
+
 
 		map = new ModelMap();
 		try {
@@ -62,11 +64,13 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder" , method=RequestMethod.POST)
+
 	public ModelMap workOrder(@RequestParam("mrpGatheringNo")String mrpGatheringNo,
 							  @RequestParam("workPlaceCode")String workPlaceCode,
 							  @RequestParam("productionProcess")String productionProcess,
 							  @RequestParam("mrpNo")String mrpNo) {
 		
+
 		map = new ModelMap();
 		try {
 
@@ -99,9 +103,11 @@ public class WorkOrderController {
 	}
 	
 	@RequestMapping(value="/workorder/completion" , method=RequestMethod.POST)
-	public ModelMap workOrderCompletion(HttpServletRequest request, HttpServletResponse response) {
-		String workOrderNo=request.getParameter("workOrderNo");
-		String actualCompletionAmount=request.getParameter("actualCompletionAmount");
+	public ModelMap workOrderCompletion(
+			@RequestParam("workOrderNo") String workOrderNo,
+			@RequestParam("actualCompletionAmount") String actualCompletionAmount
+	)  {
+
 		map = new ModelMap();
 		HashMap<String, Object> resultMap = new HashMap<>();
 		try {
@@ -136,10 +142,12 @@ public class WorkOrderController {
 	}
 	
 	@RequestMapping(value="/worksite/situation" , method=RequestMethod.GET)
-	public ModelMap showWorkSiteSituation(HttpServletRequest request, HttpServletResponse response) {
-		String workSiteCourse = request.getParameter("workSiteCourse");
-		String workOrderNo = request.getParameter("workOrderNo");
-		String itemClassIfication = request.getParameter("itemClassIfication");
+	public ModelMap showWorkSiteSituation(
+			@RequestParam("workSiteCourse") String workSiteCourse,
+			@RequestParam("workOrderNo") String workOrderNo,
+			@RequestParam("itemClassIfication") String itemClassIfication
+	)  {
+
 		map = new ModelMap();
 		try {
 			map = qualityService.showWorkSiteSituation(workSiteCourse,workOrderNo,itemClassIfication);
@@ -152,10 +160,11 @@ public class WorkOrderController {
 	}
 	
 	@RequestMapping(value="/workorder/workcompletion" , method=RequestMethod.POST)
-	public ModelMap workCompletion(HttpServletRequest request, HttpServletResponse response) {
-		String workOrderNo = request.getParameter("workOrderNo"); 
-		String itemCode = request.getParameter("itemCode"); 
-		String itemCodeList = request.getParameter("itemCodeList");  
+	public ModelMap workCompletion(
+			@RequestParam("workOrderNo") String workOrderNo,
+			@RequestParam("itemCode") String itemCode,
+			@RequestParam("itemCodeList") String itemCodeList
+	)  {
 		map = new ModelMap();
 		try {
 			ArrayList<String> itemCodeListArr = gson.fromJson(itemCodeList,
@@ -170,8 +179,10 @@ public class WorkOrderController {
 	}
 	
 	@RequestMapping(value="/workorder/worksitelog" , method=RequestMethod.GET)
-	public ModelMap workSiteLogList(HttpServletRequest request, HttpServletResponse response) {
-		String workSiteLogDate = request.getParameter("workSiteLogDate");
+	public ModelMap workSiteLogList(
+			@RequestParam("workSiteLogDate") String workSiteLogDate
+	) {
+
 		map = new ModelMap();
 		HashMap<String, Object> resultMap = new HashMap<>();
 		try {
