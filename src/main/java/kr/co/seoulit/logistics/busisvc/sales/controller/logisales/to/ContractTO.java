@@ -1,4 +1,4 @@
-package kr.co.seoulit.logistics.busisvc.logisales.to;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to;
 
 import java.util.ArrayList;
 

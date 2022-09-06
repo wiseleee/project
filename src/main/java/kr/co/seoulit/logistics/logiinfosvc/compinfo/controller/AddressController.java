@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.seoulit.logistics.logiinfosvc.compinfo.service.CompInfoService;
@@ -24,11 +25,13 @@ public class AddressController {
 	ModelMap map = null;
 	
 	@RequestMapping(value = "/address/list", method = RequestMethod.GET)
-	public ModelMap searchAddressList(HttpServletRequest request, HttpServletResponse response) {
-		String sidoName = request.getParameter("sidoName");
-		String searchAddressType = request.getParameter("searchAddressType");
-		String searchValue = request.getParameter("searchValue");
-		String mainNumber = request.getParameter("mainNumber");
+	public ModelMap searchAddressList(
+			@RequestParam("sidoName") String sidoName,
+			@RequestParam("searchAddressType") String searchAddressType,
+			@RequestParam("searchValue") String searchValue,
+			@RequestParam("mainNumber") String mainNumber
+			) {
+
 		try {
 			ArrayList<AddressTO> addressList = compInfoService.getAddressList(sidoName, searchAddressType, searchValue,
 					mainNumber);

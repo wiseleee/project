@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -34,8 +35,8 @@ public class CodeController {
 	private static Gson gson = new GsonBuilder().serializeNulls().create();
 
 	@RequestMapping(value = "/codedetail/list", method = RequestMethod.GET)
-	public ModelMap findCodeDetailList(HttpServletRequest request, HttpServletResponse response) {
-		String CodeDetail  = request.getParameter("divisionCodeNo");
+	public ModelMap findCodeDetailList(@RequestParam("divisionCodeNo") String CodeDetail) {
+
 		map = new ModelMap();
 		try {
 			ArrayList<CodeDetailTO> codeLists = compInfoService.getCodeDetailList(CodeDetail);
@@ -50,6 +51,23 @@ public class CodeController {
 		}
 		return map;
 	}
+//	@RequestMapping(value = "/codedetail/list", method = RequestMethod.GET)
+//	public ModelMap findCodeDetailList( HttpServletRequest request, HttpServletResponse response) {
+//		String CodeDetail  = request.getParameter("divisionCodeNo");
+//		map = new ModelMap();
+//		try {
+//			ArrayList<CodeDetailTO> codeLists = compInfoService.getCodeDetailList(CodeDetail);
+//
+//			map.put("codeList", codeLists);
+//			map.put("errorCode", 1);
+//			map.put("errorMsg", "성공");
+//		} catch (Exception e1) {
+//			e1.printStackTrace();
+//			map.put("errorCode", -1);
+//			map.put("errorMsg", e1.getMessage());
+//		}
+//		return map;
+//	}
 
 	@RequestMapping(value = "/codeInfo", method = RequestMethod.POST)
 	public ModelMap addCodeInFormation(HttpServletRequest request, HttpServletResponse response) {

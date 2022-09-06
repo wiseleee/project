@@ -8,8 +8,8 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.seoulit.logistics.busisvc.logisales.mapper.ContractMapper;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailInMpsAvailableTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper.ContractMapper;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailInMpsAvailableTO;
 import kr.co.seoulit.logistics.busisvc.sales.mapper.SalesPlanMapper;
 import kr.co.seoulit.logistics.prodcsvc.production.mapper.MpsMapper;
 import kr.co.seoulit.logistics.prodcsvc.production.mapper.MrpMapper;
@@ -63,6 +63,25 @@ public class ProductionServiceImpl implements ProductionService {
 		return contractDetailInMpsAvailableList;
 
 	}
+
+	public ArrayList<ContractDetailInMpsAvailableTO> getContractDetailListInProcessPlanAvailable(String searchCondition,
+			String startDate, String endDate) {
+
+		ArrayList<ContractDetailInMpsAvailableTO> contractDetailInProcessPlanAvailableList = null;
+
+		HashMap<String, String> map = new HashMap<>();
+
+		map.put("searchCondition", searchCondition);
+		map.put("startDate", startDate);
+		map.put("endDate", endDate);
+
+		contractDetailInProcessPlanAvailableList = contractMapper.selectContractDetailListInProcessPlanAvailable(map);
+
+		return contractDetailInProcessPlanAvailableList;
+
+	}
+
+
 
 	@Override
 	public ArrayList<SalesPlanInMpsAvailableTO> getSalesPlanListInMpsAvailable(String searchCondition,

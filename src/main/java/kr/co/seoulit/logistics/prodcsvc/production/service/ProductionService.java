@@ -3,7 +3,7 @@ package kr.co.seoulit.logistics.prodcsvc.production.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailInMpsAvailableTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailInMpsAvailableTO;
 import kr.co.seoulit.logistics.prodcsvc.production.to.MpsTO;
 import kr.co.seoulit.logistics.prodcsvc.production.to.MrpGatheringTO;
 import kr.co.seoulit.logistics.prodcsvc.production.to.MrpTO;
@@ -15,6 +15,9 @@ public interface ProductionService {
 	
 	public ArrayList<ContractDetailInMpsAvailableTO> 
 		getContractDetailListInMpsAvailable(String searchCondition, String startDate, String endDate);
+
+	public ArrayList<ContractDetailInMpsAvailableTO>
+		getContractDetailListInProcessPlanAvailable(String searchCondition, String startDate, String endDate);
 
 	public ArrayList<SalesPlanInMpsAvailableTO> 
 		getSalesPlanListInMpsAvailable(String searchCondition, String startDate, String endDate);

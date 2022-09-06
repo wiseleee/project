@@ -1,12 +1,11 @@
-package kr.co.seoulit.logistics.busisvc.logisales.mapper;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateTO;
 import org.apache.ibatis.annotations.Mapper;
-
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateTO;
 
 @Mapper
 public interface EstimateMapper {

@@ -88,7 +88,7 @@
 <body>
 <article class="contract">
     <div class="contract__Title">
-        <h5>📅 판매계획 등록</h5>
+        <h5>📅 공정계획 등록</h5>
         <div style="color: black;">
             <b>수주 상세</b><br/>
             <label for="contractDate">수주 일자</label>
@@ -105,8 +105,13 @@
             </div>
         </form>
         <button id="contractCandidateSearchButton">수주상세조회</button>
-        <button id="createSalesPlan">판매계획생성</button>
-        &nbsp;&nbsp;<button id="registerNewMpsButton"  style="background-color:#F15F5F" >판매계획등록</button>
+        <button class="search" id="createProcessPlan" data-toggle="modal"
+                data-target="#amountModal">공정계획생성</button>
+        <%--                <button  id="amountList" >공정계획생성--%>
+        <%--                </button>--%>
+
+
+        &nbsp;&nbsp;<button id="registerProcessPlanButton"  style="background-color:#F15F5F" >공정계획등록</button>
     </div>
 </article>
 <article class="contractMpsGrid">
@@ -115,47 +120,23 @@
     </div>
 </article>
 <!-- div>
-    <h5>📷 판매 계획</h5>
+    <h5>📷 공정 계획</h5>
 </div> -->
-<article class="estimateDetail">
-    <div class="menuButton__selectCode">
-        <button class="search" id="amountList" data-toggle="modal"
-                data-target="#amountModal">수량체크
-        </button>
-    </div>
-    </div>
-    </div>
-</article>
+
 <article class="salesMpsGrid">
     <div align="center" class="ss">
         <div id="myGrid2" class="ag-theme-balham" style="height:30vh;width:auto;"></div>
     </div>
 </article>
 
-<div class="modal fade" id="mpsModal" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">MPS LIST</h5>
-                <button type="button" class="close" data-dismiss="modal" style="padding-top: 0.5px">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="mpsGrid" class="ag-theme-balham" style="height:600px;width:auto;">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+<%--===========================================수량 모달창===========================================--%>
 <div class="modal fade" id="amountModal" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">AMOUNT</h5>
+                <h5 class="modal-title">공정계획</h5>
                 <button type="button" class="close" data-dismiss="modal" style="padding-top: 0.5px">&times;</button>
             </div>
             <div class="modal-body">
@@ -166,10 +147,7 @@
                     <input type='text' id='stockAmountUseBox'  autocomplete="off"/><br>
                     <label for='RequirementAmountBox' style='font-size: 20px; margin-right: 10px'>필요생산량</label>
                     <input type='text' id='RequirementAmountBox' autocomplete="off"/><br>
-                    <label for='stockAmountPlusBox' style='font-size: 20px; margin-right: 10px'>재고보충량</label>
-                    <input type='text' id='stockAmountPlusBox' autocomplete="off"/><br>
-                    <label for='productionRequirementBox' style='font-size: 20px; margin-right: 30px'>총생산량  </label>
-                    <input type="text" id='productionRequirementBox' autocomplete="off"></input>
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -179,12 +157,15 @@
         </div>
     </div>
 </div>
+
+
 <script>
     const myGrid = document.querySelector("#myGrid");
     const myGrid2 = document.querySelector("#myGrid2");
     const searchByDateRadio = document.querySelector("#searchByDateRadio");
     const startDatePicker = document.querySelector("#fromDate");
     const endDatePicker = document.querySelector("#toDate");
+    const registerProcessPlanButton = document.querySelector("#registerProcessPlanButton");
     // 위아래 공통으로 사용하는 column
     // let itemName;
     // let itemCode;
@@ -199,12 +180,12 @@
         },
         {headerName: "수주유형", field: "contractType"},
         {headerName: "계획구분", field: "planClassification", hide: true},
-        {headerName: "수주일자", field: "contractDate"},
+        {headerName: "수주일자", field: "contractDate", hide: true},
         {headerName: "견적수량", field: "estimateAmount"},
-        {headerName: "초기납품내역", field: "stockAmountUse"},
+        {headerName: "기존재고량", field: "stockAmountUse"},
         {headerName: "제작수량", field: "productionRequirement"},
         {
-            headerName: "계획일자", field: "mpsPlanDate", editable: true, cellRenderer: function (params) {
+            headerName: "계획일자", field: "mpsPlanDate", hide: true, editable: true, cellRenderer: function (params) {
                 if (params.value == null) {
                     params.value = "";
                 }
@@ -212,55 +193,58 @@
             }, cellEditor: 'datePicker1'
         },
         {
-            headerName: "출하예정일", field: "scheduledEndDate", editable: true, cellRenderer: function (params) {
+            headerName: "출하예정일", field: "scheduledEndDate", hide: true, editable: true, cellRenderer: function (params) {
                 if (params.value == null) {
                     params.value = "";
                 }
                 return '📅 ' + params.value;
             }, cellEditor: 'datePicker2'
         },
-        {headerName: "납기일", field: "dueDateOfContract", cellRenderer: function (params) {
+        {headerName: "납기일", field: "dueDateOfContract", hide: true, cellRenderer: function (params) {
                 if (params.value == null) {
                     params.value = "";
                 }
                 return '📅 ' + params.value;
             },},
-        {headerName: "거래처코드", field: "customerCode"},
         {headerName: "품목코드", field: "itemCode"},
         {headerName: "품목명", field: "itemName"},
         {headerName: "단위", field: "unitOfContract"},
         {headerName: "비고", field: "description", editable: true, hide: true},
     ];
-    // ------------------------------------------판매계획 칼럼리스트-------------------------------------------
-    let salesPlanColumn = [
+    // ------------------------------------------공정계획 칼럼리스트-------------------------------------------
+    let processPlanColumn = [
+
+        {headerName: "수주상세일련번호", field: "contractDetailNo", suppressSizeToFit: true, headerCheckboxSelection: true,
+            headerCheckboxSelectionFilteredOnly: true,
+            checkboxSelection: true},
         {headerName: "품목명", field: "itemName"},
         {headerName: "품목코드", field: "itemCode"},
-        {headerName: "단위", field: "unitOfContract"},
+        {headerName: "수주유형", field: "contractType"},
         {headerName: "재고량", field: "stockAmount", hide: true},
         {headerName: "견적수량", field: "estimateAmount"},
         {headerName: "재고사용량", field: "stockAmountUse"},
-        {headerName: "필요생산량", field: "RequirementAmount"},   //field값 다시 설정
-        {headerName: "재고보충량", field: "stockAmountPlus"},    //field값 다시 설정
-        {headerName: "총생산량", field: "productionRequirement"},
+        {headerName: "필요생산량", field: "RequirementAmount"},
+        // {headerName: "재고보충량", field: "stockAmountPlus"},
+        // {headerName: "총생산량", field: "productionRequirement"},
         {headerName: "MPS", field: "MPS"},
         {headerName: "납품가능", field: "Release"},
         {headerName: "비고", field: "description", editable: true, hide: true},
     ];
     let itemRowNode;
     let rowData2=[];
-    let salesPlaneGridOptions = {
+    let processPlaneGridOptions = {
         defaultColDef: {
             flex: 1,
             minWidth: 100,
             resizable: true,
         },
         rowData: rowData2,
-        columnDefs: salesPlanColumn,
+        columnDefs: processPlanColumn,
         rowSelection: 'single',
         //
         //
         // defaultColDef: {editable: false, resizable : true},
-        overlayNoRowsTemplate: "판매계획 가능한 수주가 없습니다.",
+        overlayNoRowsTemplate: "공정계획 가능한 수주가 없습니다.",
         onGridReady: function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
             event.api.sizeColumnsToFit();
         },
@@ -330,13 +314,7 @@
             datePicker2: getDatePicker("scheduledEndDate")
         }
     }
-    amountList.addEventListener('click', () => {
-        console.log(itemRowNode);
-        if (itemRowNode == undefined) {return;}
-        if (itemRowNode.data.itemCode != undefined) {
-            getstockAmount(itemRowNode.data.itemCode, "EA"); // BOX이면
-        }
-    });
+
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS 등록가능 수주상세 조회ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     const contractCandidateSearchBtn = document.querySelector("#contractCandidateSearchButton");
     contractCandidateSearchBtn.addEventListener("click", () => {
@@ -357,8 +335,8 @@
         mpsGridOptions.api.setRowData([]);
         // o ajax
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', "${pageContext.request.contextPath}/production/mps/contractdetail-available"
-            + "?method=searchContractDetailListInMpsAvailable"
+        xhr.open('GET', "${pageContext.request.contextPath}/production/mps/contractdetail-processplanavailable"
+            + "?method=searchContractDetailListInProcessPlanAvailable"
             + "&searchCondition=" + searchCondition
             + "&startDate=" + startDate
             + "&endDate=" + endDate,
@@ -373,7 +351,7 @@
                 console.log(txt);
                 let gridRowJson = txt.gridRowJson;  // gridRowJson : 그리드에 넣을 json 형식의 data
                 if (gridRowJson == "") {
-                    swal.fire("mps 등록가능 수주가 없습니다.");
+                    swal.fire("공정계획 등록가능 수주가 없습니다.");
                     return;
                 }
                 console.log(gridRowJson);
@@ -386,46 +364,25 @@
             }
         }
     });
-    //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS 등록 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS조회 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    const createSalesPlanbtn = document.querySelector("#createSalesPlan");
+
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 공정계획 생성버튼 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    const createProcessPlanbtn = document.querySelector("#createProcessPlan");
     // 위에서 채크된 row의 값들을 받아오고 재고량은 모달창 띄워서 가져오게
     // //*************여기부터 다시**********************
-    createSalesPlanbtn.addEventListener("click", () => {
-        console.log(mpsGridOptions.getSelectedRowData());
-        let row = [];
-        salesPlaneGridOptions.api.setRowData(row);  // 하나만 선택되게 초기화
+    createProcessPlanbtn.addEventListener("click", () => {
 
-        row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
-            itemName: "",
-            itemCode: "",
-            unitOfContract: "EA",
-            stockAmount: "",
-            estimateAmount: "",
-            stockAmountUse: "",
-            RequirementAmount: "",
-            stockAmountPlus: "",
-            productionRequirement: "",
-            MPS: "X",
-            Release: "불가능",
-            description: ""
-        };
         (mpsGridOptions.getSelectedRowData()).forEach((val)=>{  //val = 선택한 row하나
 
-                console.log(val);
-                console.log(val.contractNo);
-                console.log(itemRowNode);
-                row.itemName=val.itemName;
-                row.itemCode=val.itemCode;
-                //row.stockAmountUse=val.stockAmountUse;
-                row.estimateAmount=val.estimateAmount;
-                if(val.estimateAmount<val.stockAmount){
-                    row.Release="가능";
-                }
-                salesPlaneGridOptions.api.updateRowData({add: [row]});  // 여기에 다가 위의 변수들을 넣어준다. 하지만 이 상태에서 견적상세등록 칸에 ag-Grid가 들어가는 건 아니다.
+                // modal창에 값전달
+                document.querySelector("#estimateAmountBox").value=val.estimateAmount;  // 견적수량
+                document.querySelector("#stockAmountUseBox").value=val.stockAmountUse; // 위에서의 stockAmountUse
+                console.log()
+
             }
         );
     });
+    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
     // O getDataPicker
     function getDatePicker(paramFmt) {
         let _this = this;
@@ -489,42 +446,198 @@
         return Datepicker;
     }
     $("#amountModal").on('show.bs.modal', function () {
-        $('#estimateAmountBox').val("");
-        $('#stockAmountUseBox').val("");
-        $('#RequirementAmountBox').val("");
-        $('#stockAmountPlusBox').val("");
-        $('#productionRequirementBox').val("");
-        $('#stockAmountUseBox').on("keyup", function() {  //estimateAmountBox, #unitPriceOfEstimateBox 견적수량과 합계액
-            let sum1 = $('#estimateAmountBox').val() - $('#stockAmountUseBox').val();
-            //sum1에는 견적수량 - 재고사용량, 즉 필요생산량
-            $('#RequirementAmountBox').val(sum1)});
-        $('#stockAmountPlusBox').on("keyup", function() {
-            let sum2 = parseInt($('#stockAmountPlusBox').val()) + parseInt($('#RequirementAmountBox').val());//sum2에는 필요생산량 + 재고보충량, 즉 총 생산량
-            $('#productionRequirementBox').val(sum2);  //  그러면 합계액에는 위의 sum2이 담김
+
+        let firstSum = parseInt($('#estimateAmountBox').val()) - parseInt($('#stockAmountUseBox').val());
+        let stuckAmount = parseInt($('#stockAmountUseBox').val());
+        $('#RequirementAmountBox').val(firstSum);
+        $('#stockAmountUseBox').on("keyup", function() {
+
+//   if (mpsGridOptions.getRowNodeId("stockAmount") >= parseInt($('#stockAmountUseBox').val())) {
+            if (stuckAmount < parseInt($('#stockAmountUseBox').val())) {
+                // 기존재고량보다 큰 값을 재고 사용량에 입력했을 때
+                $('#stockAmountUseBox').val(stuckAmount);
+            }
+            if (parseInt($('#estimateAmountBox').val()) < parseInt($('#stockAmountUseBox').val())) {
+                // 견적수량보다 큰값을 재고사용량에 입력했을 때
+                $('#stockAmountUseBox').val($('#estimateAmountBox').val());
+            }
+
+            let sum1 = parseInt($('#estimateAmountBox').val()) - parseInt($('#stockAmountUseBox').val())
+            $('#RequirementAmountBox').val(sum1)
         });
+
     });
 
     /* $("#amountModal").on('shown.bs.modal', function () {  // 실행하고자 하는 jQuery 코드
       $('#stockAmountUseBox').focus(); //포커스를 얻었을 때 어떤 행위하기=> 견적수량 칸을 더블클릭해서 모달창이 띄워졌으면 바로 견적수량에 포커스가 위치하게 된다.
      })*/
 
+
+
+
+    // -------------------------------모달창 save버튼-------------------------------------------
+
     document.querySelector("#amountSave").addEventListener("click", () => {  //modal창 밑에 있는 Save에 걸리는 이벤트
-        if (itemRowNode == undefined) {   return;}
-        estDetailGridOptions.api.stopEditing();
-        itemRowNode.setDataValue("stockAmountUse", $('#stockAmountUseBox').val());
-        itemRowNode.setDataValue("RequirementAmount", $('#RequirementAmountBox').val());
-        itemRowNode.setDataValue("stockAmountPlus", $('#stockAmountPlusBox').val());
-        itemRowNode.setDataValue("productionRequirement", $('#productionRequirementBox').val());
-        let newData = itemRowNode.data; // 바로 위에서 받아온 견적수량,견적단가,합계액의 데이터들이 newData라는 변수명에 담긴다.
-        itemRowNode.setData(newData);  // 그러면 itemRowNode에 set해준다.  그 다음 일괄저장으로 출발
-        console.log(123);
+
+
+        console.log(mpsGridOptions.getSelectedRowData());
+        let row = [];
+        processPlaneGridOptions.api.setRowData(row);  // 하나만 선택되게 초기화
+
+
+        (mpsGridOptions.getSelectedRowData()).forEach((val)=>{  //val = 선택한 row하나
+                // 모달창의 초기수량
+                console.log($('#stockAmountUseBox').val());
+                console.log($('#RequirementAmountBox').val());
+
+
+                row = { // 버튼을 누르자마자 빈 그리드가 위치 되어지기 때문에 다 공백처리로 빈 값을 넣어놓는다고 볼 수 있다
+                    contractDetailNo:val.contractDetailNo,
+                    itemName: val.itemName,
+                    itemCode: val.itemCode,
+                    contractType: val.contractType,
+                    stockAmount: "",
+                    estimateAmount: "",
+                    stockAmountUse: "",
+                    RequirementAmount: "",
+                    stockAmountPlus: "",
+                    productionRequirement: "",
+                    MPS: "X",
+                    Release: "불가능",
+                    description: ""
+                };
+                // modal창에 값전달
+
+                console.log("견적수량 : "+val.estimateAmount);
+                console.log("재고사용량 : "+val.estimateAmount);
+                row.stockAmountUse= $('#stockAmountUseBox').val(),
+                    row.RequirementAmount= $('#RequirementAmountBox').val(),
+                    console.log(val);
+                console.log(val.contractNo);
+                console.log(itemRowNode);
+                // row.itemName=val.itemName;
+                // row.itemCode=val.itemCode;
+                //row.stockAmountUse=val.stockAmountUse;
+                row.estimateAmount=val.estimateAmount;
+                if(row.stockAmountUse==val.estimateAmount){
+                    row.Release="가능";
+                }
+                if($('#RequirementAmountBox').val()>0){
+                    row.MPS="O";
+                }
+                processPlaneGridOptions.api.updateRowData({add: [row]});  // 여기에 다가 위의 변수들을 넣어준다. 하지만 이 상태에서 견적상세등록 칸에 ag-Grid가 들어가는 건 아니다.
+            }
+        );
+
     })
+    registerProcessPlanButton.addEventListener("click", () => {
+        //입력받은 재고사용량가지고 DB로 가자
+
+        let selectedNodes = processPlaneGridOptions.api.getSelectedNodes();
+        // o No seleted Nodes
+        if (selectedNodes == "") {
+            Swal.fire({
+                position: "top",
+                icon: 'error',
+                title: '체크 항목',
+                text: '선택된 공정계획이 없습니다.',
+            })
+            return;
+        }
+
+        let contractDetailNo=[]; // 수주상세 일련번호
+        let contractType=[]; //수주유형
+        let stockAmountUse=[]; // 재고사용량
+
+        let now = new Date();
+        let today = now.getFullYear() + "-" + (now.getMonth() +1 ) + "-" +  now.getDate();
+
+        selectedNodes.map(selectedData => {//[1,2,3]
+            contractDetailNo.push(selectedData.data.contractDetailNo);
+            contractType.push(selectedData.data.contractType);
+            stockAmountUse.push(selectedData.data.stockAmountUse);
+
+            console.log(selectedData.data.contractDetailNo);
+            console.log(selectedData.data.stockAmountUse);
+
+
+        });
+
+        let resultArray={"contractDetailNo":contractDetailNo ,"contractType":contractType,"stockAmountUse":stockAmountUse};
+
+        resultArray=JSON.stringify(resultArray);
+
+        console.log(resultArray);
+        Swal.fire({
+            title: '공정계획 등록',
+            text:  contractDetailNo + "를 등록하시겠습니까?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: '취소',
+            confirmButtonText: '확인',
+        }).then( (result) => {
+            if (result.isConfirmed) {
+                let xhr = new XMLHttpRequest();
+
+                //let today = now.getFullYear() + "-" + (now.getMonth() +1 ) + "-" +  now.getDate();
+                xhr.open('POST', "${pageContext.request.contextPath}/logisales/processplan/new?"
+                    + "method=processPlan"
+                    + "&batchList=" + encodeURI(resultArray),
+                    true);
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.send();
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+
+                        // 데이터 확인
+                        let txt = xhr.responseText;
+                        txt = JSON.parse(txt);
+
+                        if (txt.errorCode < 0) {
+                            Swal.fire("오류", txt.errorMsg, "error");
+                            return;
+                        }
+                        // 초기화
+                        mpsGridOptions.api.setRowData([]);
+                        processPlaneGridOptions.api.setRowData([]);
+                        //Swal.fire("data",,"success")
+                        // console.log(txt.gridRowJson)
+                        // let conDNStr="";
+                        // const conDetailList = Object.values(txt.gridRowJson);//어레이라이크를 배열형태로 바꿔줌
+                        // console.log(conDetailList)
+                        // for(let i=0;i<conDetailList.length;i++){
+                        //     if(conDetailList[i]!=undefined){
+                        //         conDNStr+=conDetailList[i].contractDetailNo;
+                        //         conDNStr+="<br>"
+                        //         console.log(conDetailList[i].contractDetailNo);
+                        //     }
+                        // }
+                        // console.log(conDNStr);
+                        // console.log("수주 완료");
+                        // let resultMsg =
+                        //     "<h5>< 공정계획 등록 내역 ></h5><br>"
+                        //     + txt.errorMsg+"<br>"
+                        //     +"수주 상세 번호 :"
+                        //     +   conDNStr
+                        //     + "<br>위와 같이 작업이 처리되었습니다";
+                        Swal.fire({
+                            title: "공정등록이 완료되었습니다.",
+                            html:"수주 상세 코드 : " + contractDetailNo,
+                            icon: "success",
+                        });
+                    }
+                };
+            }})
+    });
 
     // O setup the grid after the page has finished loading
     document.addEventListener('DOMContentLoaded', () => {
         new agGrid.Grid(myGrid, mpsGridOptions);
-        new agGrid.Grid(myGrid2, salesPlaneGridOptions);
+        new agGrid.Grid(myGrid2, processPlaneGridOptions);
     })
+
 </script>
 </body>
 </html>

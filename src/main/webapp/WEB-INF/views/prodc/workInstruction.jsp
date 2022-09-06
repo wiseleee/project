@@ -303,7 +303,8 @@
       return
     }  
     let displayModel = workOrderSimulationGridOptions.api.getModel(); // --> 모달에있는 그리드 값반환
-    let modalData = displayModel.gridApi.getRenderedNodes(); // -->  그리드를 랜더링해줌
+      console.log(displayModel);
+    let modalData = workOrderSimulationGridOptions.api.getRenderedNodes(); // -->  그리드를 랜더링해줌
     console.log(modalData);
     let workOrderSelected = []; //작업선택
     let workOrderList = []; // 작업지시

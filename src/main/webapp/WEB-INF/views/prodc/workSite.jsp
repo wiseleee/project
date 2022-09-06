@@ -294,7 +294,7 @@
   // o 모의전개된 결과 작업지시
   completeBtn.addEventListener('click', () => { // 검사 및 제작완료   P_WORK_SITE_COMPLETION 프로시저
     let displayModel = workSiteSimulationGridOptions.api.getModel();
-    let modalData = displayModel.gridApi.getRenderedNodes();   // 랜더링된 노드들을 가지고 오는 방식임
+    let modalData = workSiteSimulationGridOptions.api.getRenderedNodes();   // 랜더링된 노드들을 가지고 오는 방식임
     let workProduct = modalData[0].data;
     let now = new Date();
     let today = now.getFullYear() + "-" +('0' + (now.getMonth() +1 )).slice(-2) + "-" + ('0' + (now.getDate())).slice(-2);

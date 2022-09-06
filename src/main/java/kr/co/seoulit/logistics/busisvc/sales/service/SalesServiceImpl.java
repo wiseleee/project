@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
-import kr.co.seoulit.logistics.busisvc.logisales.mapper.ContractMapper;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractInfoTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper.ContractMapper;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractInfoTO;
 import kr.co.seoulit.logistics.busisvc.sales.mapper.DeliveryMapper;
 import kr.co.seoulit.logistics.busisvc.sales.mapper.SalesPlanMapper;
 import kr.co.seoulit.logistics.busisvc.sales.to.DeliveryInfoTO;

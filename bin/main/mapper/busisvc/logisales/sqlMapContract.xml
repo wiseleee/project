@@ -252,4 +252,19 @@
 		DELETE FROM CONTRACT_DETAIL WHERE CONTRACT_DETAIL_NO = #{contractDetailNo}
 	</delete>
 
+	<parameterMap type="map" id="processPlanParameter">
+		<parameter property="stockAmountUse" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="contractType" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="contractDetailNo" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN" />
+		<parameter property="ERROR_CODE" javaType="java.lang.Integer" jdbcType="DECIMAL" mode="OUT" />
+		<parameter property="ERROR_MSG" javaType="java.lang.String" jdbcType="VARCHAR" mode="OUT" />
+		<parameter property="RESULT" javaType="java.sql.ResultSet" jdbcType="CURSOR" mode="OUT" resultMap="noList" />
+	</parameterMap>
+
+	<update id="processPlan" parameterMap="processPlanParameter" statementType="CALLABLE">
+        <![CDATA[
+		{call P_PROCESSPLAN(?,?,?,?,?)}
+		]]>
+    </update>
+
 </mapper>

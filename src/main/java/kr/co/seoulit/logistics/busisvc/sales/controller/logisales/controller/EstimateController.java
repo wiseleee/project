@@ -1,24 +1,21 @@
-package kr.co.seoulit.logistics.busisvc.logisales.controller;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.service.LogisalesService;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
-import kr.co.seoulit.logistics.busisvc.logisales.service.LogisalesService;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateTO;
 
 @RestController
 @RequestMapping("/logisales/*")
@@ -33,11 +30,11 @@ public class EstimateController {
 	private static Gson gson = new GsonBuilder().serializeNulls().create(); // 속성값이 null 인 속성도 json 변환
 
 	@RequestMapping(value="/estimate/list", method=RequestMethod.GET)
-	public ModelMap searchEstimateInfo(HttpServletRequest request, HttpServletResponse response) {
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
-		String dateSearchCondition = request.getParameter("dateSearchCondition");
-		
+	public ModelMap searchEstimateInfo(
+			@RequestParam("startDate") String startDate,
+			@RequestParam("endDate") String endDate,
+			@RequestParam("dateSearchCondition") String dateSearchCondition
+		) {
 		map = new ModelMap();
 		
 		try {
@@ -56,8 +53,7 @@ public class EstimateController {
 	}
 
 	@RequestMapping(value="/estimatedetail/list", method=RequestMethod.GET)
-	public ModelMap searchEstimateDetailInfo(HttpServletRequest request, HttpServletResponse response) {
-		String estimateNo = request.getParameter("estimateNo");
+	public ModelMap searchEstimateDetailInfo(@RequestParam("estimateNo") String estimateNo) {
 		
 		map = new ModelMap();
 		
@@ -76,9 +72,10 @@ public class EstimateController {
 	}
 
 	@RequestMapping(value="/estimate/new", method=RequestMethod.POST)
-	public ModelMap addNewEstimate(HttpServletRequest request, HttpServletResponse response) {
-		String estimateDate = request.getParameter("estimateDate");
-		String newEstimateInfo = request.getParameter("newEstimateInfo");
+	public ModelMap addNewEstimate(
+			@RequestParam("estimateDate") String estimateDate,
+			@RequestParam("newEstimateInfo") String newEstimateInfo
+		) {
 		EstimateTO newEstimateTO = gson.fromJson(newEstimateInfo, EstimateTO.class);
 		
 		map = new ModelMap();
@@ -97,10 +94,10 @@ public class EstimateController {
 		return map;
 	}
 	@RequestMapping(value="/estimate", method=RequestMethod.DELETE)
-	public ModelMap deleteEstimateInfo(HttpServletRequest request, HttpServletResponse response) {
-
-		String estimateNo = request.getParameter("estimateNo");
-		String status = request.getParameter("status");
+	public ModelMap deleteEstimateInfo(
+			@RequestParam("estimateNo") String estimateNo,
+			@RequestParam("status") String status
+		) {
 
 		map = new ModelMap();
 
@@ -120,9 +117,7 @@ public class EstimateController {
 	}
 
 	@RequestMapping(value="/estimatedetail/batch", method=RequestMethod.POST)
-	public ModelMap batchListProcess(HttpServletRequest request, HttpServletResponse response) {
-		
-		String batchList = request.getParameter("batchList");
+	public ModelMap batchListProcess(@RequestParam("batchList") String batchList) {
 		
 		//String estimateNo = request.getParameter("estimateNo");
 		ArrayList<EstimateDetailTO> estimateDetailTOList = gson.fromJson(batchList,

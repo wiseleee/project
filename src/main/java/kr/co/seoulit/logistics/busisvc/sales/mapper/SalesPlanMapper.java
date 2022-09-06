@@ -3,6 +3,8 @@ package kr.co.seoulit.logistics.busisvc.sales.mapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.logistics.busisvc.sales.to.SalesPlanTO;
+import kr.co.seoulit.logistics.prodcsvc.production.to.SalesPlanInMpsAvailableTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.seoulit.logistics.busisvc.sales.to.SalesPlanTO;

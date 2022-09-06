@@ -1,14 +1,13 @@
-package kr.co.seoulit.logistics.busisvc.logisales.service;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractInfoTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateTO;
 import org.springframework.ui.ModelMap;
-
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractInfoTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateTO;
 
 public interface LogisalesService {
 
@@ -27,7 +26,7 @@ public interface LogisalesService {
 	
 	// ContractApplicationServiceImpl
 	public ArrayList<ContractInfoTO> getContractList(String searchCondition, String startDate, String endDate,
-			String customerCode);
+                                                     String customerCode);
 		
 	public ArrayList<ContractDetailTO> getContractDetailList(String estimateNo);
 	
@@ -38,5 +37,6 @@ public interface LogisalesService {
 	public HashMap<String, Object> batchContractDetailListProcess(ArrayList<ContractDetailTO> contractDetailTOList);
 	
 	public void changeContractStatusInEstimate(String estimateNo , String contractStatus);
-	
+
+	public void processPlan(HashMap<String,String[]> processMap);
 }

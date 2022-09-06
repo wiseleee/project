@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailInMpsAvailableTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailInMpsAvailableTO;
 import kr.co.seoulit.logistics.prodcsvc.production.service.ProductionService;
 import kr.co.seoulit.logistics.prodcsvc.production.to.MpsTO;
 import kr.co.seoulit.logistics.prodcsvc.production.to.SalesPlanInMpsAvailableTO;
@@ -62,6 +62,27 @@ public class MpsController {
 		try {
 			ArrayList<ContractDetailInMpsAvailableTO> contractDetailInMpsAvailableList = 
 					productionService.getContractDetailListInMpsAvailable(searchCondition, startDate, endDate);
+			map.put("gridRowJson", contractDetailInMpsAvailableList);
+			map.put("errorCode", 1);
+			map.put("errorMsg", "성공");
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			map.put("errorCode", -1);
+			map.put("errorMsg", e1.getMessage());
+		}
+		return map;
+	}
+
+	@RequestMapping(value="/mps/contractdetail-processplanavailable", method=RequestMethod.GET)
+	public ModelMap searchContractDetailListInProcessPlanAvailable(HttpServletRequest request,
+														   HttpServletResponse response) {
+		String searchCondition = request.getParameter("searchCondition");
+		String startDate = request.getParameter("startDate");
+		String endDate = request.getParameter("endDate");
+		map = new ModelMap();
+		try {
+			ArrayList<ContractDetailInMpsAvailableTO> contractDetailInMpsAvailableList =
+					productionService.getContractDetailListInProcessPlanAvailable(searchCondition, startDate, endDate);
 			map.put("gridRowJson", contractDetailInMpsAvailableList);
 			map.put("errorCode", 1);
 			map.put("errorMsg", "성공");

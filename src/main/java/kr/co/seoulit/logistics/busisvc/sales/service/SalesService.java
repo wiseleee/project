@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.ui.ModelMap;
 
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractInfoTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractInfoTO;
 import kr.co.seoulit.logistics.busisvc.sales.to.DeliveryInfoTO;
 import kr.co.seoulit.logistics.busisvc.sales.to.SalesPlanTO;
 

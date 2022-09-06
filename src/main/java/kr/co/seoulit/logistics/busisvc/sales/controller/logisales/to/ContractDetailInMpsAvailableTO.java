@@ -1,4 +1,4 @@
-package kr.co.seoulit.logistics.busisvc.logisales.to;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to;
 
 import kr.co.seoulit.logistics.logiinfosvc.compinfo.to.BaseTO;
 import lombok.Data;

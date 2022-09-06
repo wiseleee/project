@@ -213,6 +213,7 @@
     },
     onCellDoubleClicked: (event) => {
         if (event != undefined) {
+            console.log("이거");
           estimateDetailBtn.click();
         }
      },
@@ -269,7 +270,7 @@
   // o if customer modal hide, next cell
   $("#listModal").on('hide.bs.modal', function () {
     contractGridOptions.api.stopEditing();
-    console.log(contractRowNode);
+    console.log("모달 더블클릭");
     if (contractRowNode != undefined) { // rowNode가 없는데 거래처 코드 탐색시 에러
       setDataOnCustomerName();
     }
@@ -424,6 +425,7 @@
 
   // O register contract
   contractBatchInsertBtn.addEventListener("click", () => {
+
     let selectedNodes = contractGridOptions.api.getSelectedNodes();
     // o No seleted Nodes
     if (selectedNodes == "") {
@@ -476,6 +478,7 @@
     let resultArray={"estimateNo":estimateNo ,"contractType":contractType,"contractRequester":contractRequester,"personCodeInCharge":personCodeInCharge,"discription":discription,"contractDate":contractDate,"customerCode":customerCode};
 
     resultArray=JSON.stringify(resultArray);
+    // 수주 유형입력 안했을 때
     if (selectedNodes[0].data.contractType == undefined) {
       Swal.fire({
         position: "top",
@@ -495,7 +498,7 @@
       cancelButtonText: '취소',
       confirmButtonText: '확인',
     }).then( (result) => {
-      if (result.isConfirmed) {
+      if (result.isConfirmed) { //확인버튼을 눌렀을때
       let xhr = new XMLHttpRequest();
      
       //let today = now.getFullYear() + "-" + (now.getMonth() +1 ) + "-" +  now.getDate();

@@ -1,19 +1,19 @@
-package kr.co.seoulit.logistics.busisvc.logisales.service;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.TreeSet;
 
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper.ContractMapper;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper.EstimateMapper;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractInfoTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
-
-import kr.co.seoulit.logistics.busisvc.logisales.mapper.ContractMapper;
-import kr.co.seoulit.logistics.busisvc.logisales.mapper.EstimateMapper;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractInfoTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateTO;
 
 @Service
 public class LogisalesServiceImpl implements LogisalesService {
@@ -22,6 +22,7 @@ public class LogisalesServiceImpl implements LogisalesService {
 	private ContractMapper contractMapper;
 	@Autowired
 	private EstimateMapper estimateMapper;
+
 
 	@Override
 	public ArrayList<EstimateTO> getEstimateList(String dateSearchCondition, String startDate, String endDate) {
@@ -283,7 +284,8 @@ public class LogisalesServiceImpl implements LogisalesService {
 		setValue=new HashMap<String,String>();
 		for(String key:workingContractList.keySet()) {
 			str=new StringBuffer();
-				
+
+			// {수주상세번호,수주유형,수주등록자...)
 			for(String value:workingContractList.get(key)) {
 				if(key.equals("contractDate")) {
 					String newContractNo=getNewContractNo(value);	
@@ -380,5 +382,22 @@ public class LogisalesServiceImpl implements LogisalesService {
 
 	}
 
-	
+	public void processPlan(HashMap<String,String[]> processMap) {
+		ModelMap resultMap = new ModelMap();
+		HashMap<String, String> map = new HashMap<>();
+
+
+		System.out.println("서비스임플 map : "+processMap);
+		Set<String> keys = processMap.keySet();
+		keys.forEach((key)->{
+			System.out.println(processMap.get(key));
+			for(String val:processMap.get(key)) {
+				map.put(key,val);
+			}
+		});
+		System.out.println("프로시저 변수값 map : "+map);
+		contractMapper.processPlan(map);
+
+
+	}
 }

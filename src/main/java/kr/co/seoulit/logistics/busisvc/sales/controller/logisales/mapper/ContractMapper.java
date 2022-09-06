@@ -1,15 +1,15 @@
-package kr.co.seoulit.logistics.busisvc.logisales.mapper;
+package kr.co.seoulit.logistics.busisvc.sales.controller.logisales.mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailInMpsAvailableTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractDetailTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractInfoTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.EstimateTO;
 import org.apache.ibatis.annotations.Mapper;
 
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailInMpsAvailableTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractDetailTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractInfoTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.ContractTO;
-import kr.co.seoulit.logistics.busisvc.logisales.to.EstimateTO;
+import kr.co.seoulit.logistics.busisvc.sales.controller.logisales.to.ContractTO;
 
 @Mapper
 public interface ContractMapper {
@@ -38,15 +38,20 @@ public interface ContractMapper {
 
 	public ArrayList<ContractDetailInMpsAvailableTO> selectContractDetailListInMpsAvailable(
 			HashMap<String, String> map);
-/*
-	public void insertContractDetail(ContractDetailTO TO);
-
-	public void updateContractDetail(ContractDetailTO TO);*/
+//
+	public ArrayList<ContractDetailInMpsAvailableTO> selectContractDetailListInProcessPlanAvailable(
+			HashMap<String, String> map);
+//
+//	public void insertContractDetail(ContractDetailTO TO);
+//
+//	public void updateContractDetail(ContractDetailTO TO);
 
 	public void changeMpsStatusOfContractDetail(HashMap<String, String> map);
 
 	public void deleteContractDetail(ContractDetailTO TO);
 	
 	public void insertContractDetail(HashMap<String,String>  workingContractList);
+
+	public void processPlan(HashMap<String, String> map);
 
 }
