@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -33,10 +34,11 @@ public class MpsController {
 	private static Gson gson = new GsonBuilder().serializeNulls().create();
 
 	@RequestMapping(value="/mps/list", method=RequestMethod.GET)
-	public ModelMap searchMpsInfo(HttpServletRequest request, HttpServletResponse response) {
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
-		String includeMrpApply = request.getParameter("includeMrpApply"); 
+	public ModelMap searchMpsInfo(@RequestParam("startDate")String startDate,
+								  @RequestParam("endDate")String endDate,
+								  @RequestParam("includeMrpApply")String includeMrpApply) {
+
+
 		map = new ModelMap();
 		try {
 			ArrayList<MpsTO> mpsTOList = productionService.getMpsList(startDate, endDate, includeMrpApply);
@@ -53,11 +55,10 @@ public class MpsController {
 	}
 
 	@RequestMapping(value="/mps/contractdetail-available", method=RequestMethod.GET)
-	public ModelMap searchContractDetailListInMpsAvailable(HttpServletRequest request,
-			HttpServletResponse response) {
-		String searchCondition = request.getParameter("searchCondition");
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
+	public ModelMap searchContractDetailListInMpsAvailable(@RequestParam("searchCondition")String searchCondition,
+														   @RequestParam("startDate")String startDate,
+														   @RequestParam("endDate")String endDate) {
+
 		map = new ModelMap();
 		try {
 			ArrayList<ContractDetailInMpsAvailableTO> contractDetailInMpsAvailableList = 
@@ -74,11 +75,10 @@ public class MpsController {
 	}
 
 	@RequestMapping(value="/mps/contractdetail-processplanavailable", method=RequestMethod.GET)
-	public ModelMap searchContractDetailListInProcessPlanAvailable(HttpServletRequest request,
-														   HttpServletResponse response) {
-		String searchCondition = request.getParameter("searchCondition");
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
+	public ModelMap searchContractDetailListInProcessPlanAvailable(@RequestParam("searchCondition")String searchCondition,
+																   @RequestParam("startDate")String startDate,
+																   @RequestParam("endDate")String endDate) {
+
 		map = new ModelMap();
 		try {
 			ArrayList<ContractDetailInMpsAvailableTO> contractDetailInMpsAvailableList =
@@ -95,10 +95,10 @@ public class MpsController {
 	}
 
 	@RequestMapping(value="/mps/salesplan-available", method=RequestMethod.GET)
-	public ModelMap searchSalesPlanListInMpsAvailable(HttpServletRequest request, HttpServletResponse response) {
-		String searchCondition = request.getParameter("searchCondition");
-		String startDate = request.getParameter("startDate");
-		String endDate = request.getParameter("endDate");
+	public ModelMap searchSalesPlanListInMpsAvailable(@RequestParam("searchCondition")String searchCondition,
+													  @RequestParam("startDate")String startDate,
+													  @RequestParam("endDate")String endDate) {
+
 		map = new ModelMap();
 		try {
 			ArrayList<SalesPlanInMpsAvailableTO> salesPlanInMpsAvailableList = 
@@ -116,8 +116,8 @@ public class MpsController {
 	}
 
 	@RequestMapping(value="mps/contractdetail", method=RequestMethod.PUT)
-	public ModelMap convertContractDetailToMps(HttpServletRequest request, HttpServletResponse response) {
-		String batchList = request.getParameter("batchList"); 
+	public ModelMap convertContractDetailToMps(@RequestParam("batchList")String batchList) {
+
 		map = new ModelMap();
 		ArrayList<ContractDetailInMpsAvailableTO> contractDetailInMpsAvailableList = gson.fromJson(batchList,
 				new TypeToken<ArrayList<ContractDetailInMpsAvailableTO>>() {}.getType());
@@ -137,8 +137,8 @@ public class MpsController {
 	}
 
 	@RequestMapping(value="/mps/salesplan", method=RequestMethod.PUT)
-	public ModelMap convertSalesPlanToMps(HttpServletRequest request, HttpServletResponse response) {
-		String batchList = request.getParameter("batchList");
+	public ModelMap convertSalesPlanToMps(@RequestParam("batchList")String batchList) {
+
 		map = new ModelMap();
 		try {
 			ArrayList<SalesPlanInMpsAvailableTO> salesPlanInMpsAvailableList = gson.fromJson(batchList,

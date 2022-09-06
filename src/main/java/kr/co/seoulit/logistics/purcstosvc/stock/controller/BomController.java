@@ -97,6 +97,7 @@ public class BomController {
 		map= new ModelMap();
 		ArrayList<BomTO> batchBomList = gson.fromJson(batchList, new TypeToken<ArrayList<BomTO>>() {
 		}.getType());
+
 		try {
 			HashMap<String, Object> resultList = stockService.batchBomListProcess(batchBomList);
 

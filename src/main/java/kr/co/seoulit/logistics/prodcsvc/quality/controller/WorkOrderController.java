@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -46,9 +47,9 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder/dialog" , method=RequestMethod.GET)
-	public ModelMap showWorkOrderDialog(HttpServletRequest request, HttpServletResponse response) {
-		String mrpGatheringNoList = request.getParameter("mrpGatheringNoList");
-		String mrpNoList = request.getParameter("mrpNoList");
+	public ModelMap showWorkOrderDialog(@RequestParam("mrpGatheringNoList")String mrpGatheringNoList,
+										@RequestParam("mrpNoList")String mrpNoList) {
+
 		map = new ModelMap();
 		try {
 			map = qualityService.getWorkOrderSimulationList(mrpGatheringNoList,mrpNoList);
@@ -61,11 +62,11 @@ public class WorkOrderController {
 	}
 
 	@RequestMapping(value="/workorder" , method=RequestMethod.POST)
-	public ModelMap workOrder(HttpServletRequest request, HttpServletResponse response) {
-		String mrpGatheringNo = request.getParameter("mrpGatheringNo"); // mrpGatheringNo
-		String workPlaceCode = request.getParameter("workPlaceCode"); 
-		String productionProcess = request.getParameter("productionProcessCode"); 
-		String mrpNo = request.getParameter("mrpNo");
+	public ModelMap workOrder(@RequestParam("mrpGatheringNo")String mrpGatheringNo,
+							  @RequestParam("workPlaceCode")String workPlaceCode,
+							  @RequestParam("productionProcess")String productionProcess,
+							  @RequestParam("mrpNo")String mrpNo) {
+		
 		map = new ModelMap();
 		try {
 
