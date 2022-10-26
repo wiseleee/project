@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/datepicker.css">
 
     <script>
-        // O setting datapicker
+        // O setting datapicker,ll
         $(function () {
             // set default dates
             let start = new Date();
