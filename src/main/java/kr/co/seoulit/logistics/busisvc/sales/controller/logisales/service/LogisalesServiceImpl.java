@@ -55,21 +55,21 @@ public class LogisalesServiceImpl implements LogisalesService {
 
 		ModelMap resultMap = null;
 
-		String newEstimateNo = getNewEstimateNo(estimateDate);
+		String newEstimateNo = getNewEstimateNo(estimateDate); //견적일련번호 생성
 
-		newEstimateTO.setEstimateNo(newEstimateNo);
+		newEstimateTO.setEstimateNo(newEstimateNo); //뷰단에서 보내온 견적 TO에 새로운 견적 일련번호 할당
 
-		estimateMapper.insertEstimate(newEstimateTO);
+		estimateMapper.insertEstimate(newEstimateTO); //db에 올림
 			
 		ArrayList<EstimateDetailTO> estimateDetailTOList = newEstimateTO.getEstimateDetailTOList(); //bean객체
-			
+			    //견적상세리스트
 		for (EstimateDetailTO bean : estimateDetailTOList) {
 			String newEstimateDetailNo = getNewEstimateDetailNo(newEstimateNo);
-				
+				//견적상세 일련번호
 			bean.setEstimateNo(newEstimateNo);
-				
+				//앞에서 생성된 견적 일련번호 할당 ex)ES2022081812
 			bean.setEstimateDetailNo(newEstimateDetailNo);
-		}
+		}      //새롭게 생선된 견적상세 일련번호 할당 ex)ESES2022081812-01
 
 		resultMap = batchEstimateDetailListProcess(estimateDetailTOList,newEstimateNo);
 
@@ -135,23 +135,23 @@ public class LogisalesServiceImpl implements LogisalesService {
 		ModelMap resultMap = new ModelMap();
 		
 		ArrayList<EstimateDetailTO> list = new ArrayList<>();
-		
+		//추가,수정,삭제된 견적상세 일련번호를 담을 ArrayList
 		ArrayList<String> insertList = new ArrayList<>();
 		ArrayList<String> updateList = new ArrayList<>();
 		ArrayList<String> deleteList = new ArrayList<>();
-
-		estimateMapper.initDetailSeq();
+//첫번째 반복문 : insert만 처리 -> DELETE를 먼저하면 새로운 번호가 기존에 매겨졌던 번호로 매겨질수 있음.
+		estimateMapper.initDetailSeq(); //시퀀스 초기화
 		list = estimateMapper.selectEstimateDetailCount(estimateNo);
 		TreeSet<Integer> intSet = new TreeSet<>();
 		int cnt;
 
 		for(EstimateDetailTO bean : list) {
 			String estimateDetailNo = bean.getEstimateDetailNo();
-			int no = Integer.parseInt(estimateDetailNo.split("-")[1]);
-			intSet.add(no);
+			int no = Integer.parseInt(estimateDetailNo.split("-")[1]); //
+			intSet.add(no); //행의갯수 찾음, -01 이렇게 붙는 갯수를 intSet에 담음
 		}
 
-		if (intSet.isEmpty()) {
+		if (intSet.isEmpty()) { //아무것도 안들어가있으면 1을리턴
 			cnt =  1;
 		} else {
 			cnt =  intSet.pollLast() + 1;
@@ -176,9 +176,9 @@ public class LogisalesServiceImpl implements LogisalesService {
 						intSet.add(no);
 					}
 
-					if (intSet.isEmpty()) {
+					if (intSet.isEmpty()) { //새로운 견적에 견적상세 등록한 경우
 						newCnt =  1;
-					} else {
+					} else { //기존견적에 견적상세 추가한경우
 						newCnt =  intSet.pollLast() + 1;
 					}
 					StringBuffer newEstimateDetailNo = new StringBuffer();
@@ -263,12 +263,12 @@ public class LogisalesServiceImpl implements LogisalesService {
 		map.put("startDate", startDate);
 		map.put("endDate", endDate);
 
-		estimateListInContractAvailable = contractMapper.selectEstimateListInContractAvailable(map);
+		estimateListInContractAvailable = contractMapper.selectEstimateListInContractAvailable(map); //수주가능 견적조회
 
 		for (EstimateTO bean : estimateListInContractAvailable) {
 
 			bean.setEstimateDetailTOList(estimateMapper.selectEstimateDetailList(bean.getEstimateNo()));//ES2022011360
-
+//하나의 견적상세리스트가 추가될때마다 견적상세TO가 추가됨, 해당견적에 견적상세 추가
 		}
 
 		return estimateListInContractAvailable;
@@ -282,21 +282,21 @@ public class LogisalesServiceImpl implements LogisalesService {
 		StringBuffer str = null;
 
 		setValue=new HashMap<String,String>();
-		for(String key:workingContractList.keySet()) {
+		for(String key:workingContractList.keySet()) { //key로만 이루어진 배열을 for문안에 돌림
 			str=new StringBuffer();
 
 			// {수주상세번호,수주유형,수주등록자...)
-			for(String value:workingContractList.get(key)) {
+			for(String value:workingContractList.get(key)) { //key에 해당되는 value값 들고옴
 				if(key.equals("contractDate")) {
-					String newContractNo=getNewContractNo(value);	
-					str.append(newContractNo+",");
+					String newContractNo=getNewContractNo(value);	 //수주번호 생성(날짜에 번호가 붙음)
+					str.append(newContractNo+","); //key1 : [a,b,c] -> key : a,b,c
 				}
 				else str.append(value+",");
 			}
 
 			str.substring(0, str.length()-1);
 			if(key.equals("contractDate")) 
-				setValue.put("newContractNo", str.toString()); 
+				setValue.put("newContractNo", str.toString()); //HashMap<String,String[]>를 HashMap<String,String>으로 바꿈
 					
 			else 
 			setValue.put(key, str.toString());
@@ -386,11 +386,10 @@ public class LogisalesServiceImpl implements LogisalesService {
 		ModelMap resultMap = new ModelMap();
 		HashMap<String, String> map = new HashMap<>();
 
-
 		System.out.println("서비스임플 map : "+processMap);
 		Set<String> keys = processMap.keySet();
 		keys.forEach((key)->{
-			System.out.println(processMap.get(key));
+			System.out.println(processMap.get(key)); //get(key): 키값의 value를 가지고 올때
 			for(String val:processMap.get(key)) {
 				map.put(key,val);
 			}

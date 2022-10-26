@@ -32,10 +32,10 @@
 <c:if test="${sessionID != null }">
 
 <div class="wrapper d-flex align-items-stretch">
-    <nav id="sidebar">
+    <nav id="sidebar"> <%--다른 페이지 또는 현재 페이지의 다른 부분과 연결되는 네비게이션 링크들의 집합을 정의할 때, 메뉴, 목차, 인덱스 사용--%>
         <div class="p-4 pt-5">
             <a href="/hello3/view" class="img logo rounded-circle mb-5" style="background-image: url('${pageContext.request.contextPath}${sessionScope.image}');"></a>
-            <p style="text-align: center">👩🏻‍💼 ${sessionScope.empName}${sessionScope.positionName}님 환영합니다.</p>
+            <p style="text-align: center">👩🏻‍💼 ${sessionScope.empName}${sessionScope.positionName}님 환영합니다.</p><%--문단을 만들때 사용--%>
  			
  			<!-- 메뉴 -->
  			<div> ${sessionScope.allMenuList} </div>
@@ -74,12 +74,12 @@
         <sitemesh:write property='body'/>
     </div>
 </div>
-    <script>
+    <script>//DOMContentLoaded는 HTML document를 전부 읽고 DOM트리를 완성하는 즉시 이벤트가 호출
 	    document.addEventListener('DOMContentLoaded', () => {
 	     	let menuList = new Array();     	
 	      	<c:forEach var="menu" items="${sessionScope.authorityGroupMenuList}">
 					menuList.push("${menu}");
-			</c:forEach>   
+			</c:forEach>   //반복문
 			
 	 		$(".m").on('click', function (event) {
 				

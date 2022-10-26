@@ -24,7 +24,7 @@
 		WHERE TO_DATE(MPS_PLAN_DATE, 'YYYY-MM-DD')
 		BETWEEN
 		TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
-		<if test="includeMrpApply=='excludeMrpApply'">
+		<if test="includeMrpApply=='excludeMrpApply'">--MRP적용안된 주생산계획 미포함
 			AND MRP_APPLY_STATUS IS NULL
 		</if>
 	</select>

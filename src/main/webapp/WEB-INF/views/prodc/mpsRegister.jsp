@@ -210,7 +210,7 @@
       return data.contractDetailNo;
     },
     defaultColDef: {editable: false, resizable : true},
-    overlayNoRowsTemplate: "수주 가능한 견적이 없습니다.",
+    overlayNoRowsTemplate: "수주 가능한 견적이 없습니다.",//ag-grid 창에 기본으로 적힌 글
     onGridReady: function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
       event.api.sizeColumnsToFit();
     },
@@ -259,7 +259,7 @@
     let xhr = new XMLHttpRequest();
     xhr.open('GET', "${pageContext.request.contextPath}/production/mps/contractdetail-available"
         + "?method=searchContractDetailListInMpsAvailable"
-        + "&searchCondition=" + searchCondition
+        + "&searchCondition=" + searchCondition //수주일자냐 납기일자냐
         + "&startDate=" + startDate
         + "&endDate=" + endDate,
         true);
@@ -317,7 +317,7 @@
       resultRows.push(node.data);
       console.log(resultList);
     }
-    resultList = JSON.stringify(resultList);  
+    resultList = JSON.stringify(resultList);  // 객체를 JSON 문자열로 변환
     // o insert mps
     Swal.fire({
       title: 'MPS 등록',
@@ -362,6 +362,7 @@
     }})
   });
   let _getMpsList = (function() {
+     // console.log("실행1");
     let executed = false;
     return function() {
       if (!executed) {
@@ -371,6 +372,7 @@
     };
   })();
   let _setMpsModal = (function() {
+     // console.log("실행2");
     let executed = false;
     return function() {
       if (!executed) {
@@ -381,7 +383,7 @@
   })();
 
    // ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ MPS조회 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-   
+   //여기 모달창에 리스트가 안뜸
    const mpsModalBtn = document.querySelector("#mpsModalBtn");
   
   mpsModalBtn.addEventListener("click", () => {   // MPS 조회
@@ -389,7 +391,7 @@
       swal.fire("입력", "조회기간을 설정해야합니다.", "info");
       return;
     } else {
-      _getMpsList();
+      _getMpsList();//modal.js의 getMpsList 실행
       _setMpsModal();
       $('#mpsModal').modal('show');
     }

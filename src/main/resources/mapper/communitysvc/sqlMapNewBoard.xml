@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.seoulit.logistics.communitysvc.mapper.NewBoardMapper">
+  	
+  	<resultMap type="kr.co.seoulit.logistics.communitysvc.to.NewBoardTO" id="newBoardResult">
+  		<result property="id" column="ID" />
+  		<result property="nickname" column="NICKNAME" />
+  		<result property="title" column="TITLE" />
+  		<result property="askdate" column="ASKDATE" />
+		<result property="content" column="CONTENT" />
+  	</resultMap>
+  	
+  	<select id="selectNewBoardList" resultMap="newBoardResult" >
+  		SELECT ID, NICKNAME, TITLE, ASKDATE FROM BOARD ORDER BY ID
+  	</select>
+
+	<insert id="insertNewBoard" parameterType="kr.co.seoulit.logistics.communitysvc.to.NewBoardTO" >
+		<![CDATA[
+		INSERT INTO BOARD (ID, NICKNAME, TITLE, ASKDATE, CONTENT)
+		values ( num_seq.NEXTVAL, #{nickname}, #{title}, sysdate, #{content} )
+		]]> /* num_seq.NEXTVAL 해당 시퀀스의 다음값 */
+	</insert>
+<!--시퀀스를 여러명이서 사용할때는 values 안에 num_seq.NEXTVAL를 사용하면안됨, selectKey 태그를 써서 이름을 넣어야 중복이 안됨-->
+
+	<select id="selectNewBoardDetail" resultMap="newBoardResult" >
+		SELECT ID, NICKNAME, TITLE, ASKDATE, CONTENT FROM BOARD WHERE ID=#{ID}
+	</select>
+
+	<delete id="deleteNewBoard" parameterType="kr.co.seoulit.logistics.communitysvc.to.NewBoardTO" >
+		DELETE FROM BOARD WHERE ID = #{ID}
+	</delete>
+
+	<update id="updateNewBoard" parameterType="kr.co.seoulit.logistics.communitysvc.to.NewBoardTO"  >
+		UPDATE BOARD SET CONTENT = #{content} WHERE ID = #{id}
+	</update>
+
+</mapper>

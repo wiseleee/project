@@ -63,7 +63,7 @@ public class ContractController {
 		
 		map = new ModelMap();
 		
-		try {
+		try {//contractNo받아오는 이유는 방금처리한 데이터를 알기위해서
 			ArrayList<ContractDetailTO> contractDetailTOList = logisalesService.getContractDetailList(contractNo);
 			map.put("gridRowJson", contractDetailTOList);
 			map.put("errorCode", 1);
@@ -103,7 +103,8 @@ public class ContractController {
 		
 		try {	
 			
-			HashMap<String,String[]>workingContractList = gson.fromJson(batchList,new TypeToken<HashMap<String,String[]>>() {}.getType()) ;
+			HashMap<String,String[]>workingContractList = gson.fromJson(batchList,new TypeToken<HashMap<String,String[]>>() {}.getType()) ;//gson.fromJson 호출을 할 때 저 형태의 객체를 두번째 파라미터로 넘김
+			//Gson에서 Json문을 원하는 타입으로 읽어들일때 사용
 			map = logisalesService.addNewContract(workingContractList);
 			System.out.println("수주등록 map : "+ map);
 		} catch (Exception e1) {

@@ -183,7 +183,6 @@
     getRowNodeId: function(data) {
       return data.itemCode;
     },
-    defaultColDef: {editable: false, resizable : true},
     overlayNoRowsTemplate: "조회된 발주 데이터가 없습니다.",
     onGridReady: function(event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
       event.api.sizeColumnsToFit();
@@ -213,7 +212,7 @@
           swal.fire("오류", txt.errorMsg, "error");
           return;
         }
-        console.log(txt);
+        console.log("txt"+txt);
         stockGridOptions.api.setRowData(txt.gridRowJson);
       }
     }
@@ -299,7 +298,7 @@
                       $("#warehousingModal").modal('show');
                     }
                   }
-                }
+                }8
          })
   })
   warehousingBtn.addEventListener('click', () => {

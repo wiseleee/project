@@ -372,7 +372,7 @@ public class HRServiceImpl implements HRService {
 
 		// nav메뉴 정렬을 위한 treemap
 		TreeMap<Integer, MenuTO> treeMap = new TreeMap<>();
-
+		//TreeMap은 키와 값이 저장된 Map, Etnry를 저장한다. 객체 자동정렬
 		
 		ArrayList<MenuTO> allMenuTOList = authorityMapper.selectAllMenuList();
 

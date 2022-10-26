@@ -334,7 +334,7 @@
         // o reset Grid
         mpsGridOptions.api.setRowData([]);
         // o ajax
-        let xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest(); //서버로부터 XML 데이터를 전송받아 처리하는 데 사용
         xhr.open('GET', "${pageContext.request.contextPath}/production/mps/contractdetail-processplanavailable"
             + "?method=searchContractDetailListInProcessPlanAvailable"
             + "&searchCondition=" + searchCondition
@@ -356,7 +356,7 @@
                 }
                 console.log(gridRowJson);
                 gridRowJson.map((unit, idx) => {
-                    unit.description = unit.description == null ? "" : unit.description
+                    unit.description = unit.description == null ? "" : unit.description //unit.description 이거왜 두번이나쓰지?
                     unit.planClassification = unit.planClassification == null ? "수주상세" : unit.planClassification
                     console.log(unit);
                     mpsGridOptions.api.updateRowData({add: [unit]});
@@ -509,7 +509,7 @@
                 // modal창에 값전달
 
                 console.log("견적수량 : "+val.estimateAmount);
-                console.log("재고사용량 : "+val.estimateAmount);
+                console.log("재고사용량 : "+val.estimateAmount);//얘는 왜 estimateAmount지?
                 row.stockAmountUse= $('#stockAmountUseBox').val(),
                     row.RequirementAmount= $('#RequirementAmountBox').val(),
                     console.log(val);
@@ -552,7 +552,7 @@
         let now = new Date();
         let today = now.getFullYear() + "-" + (now.getMonth() +1 ) + "-" +  now.getDate();
 
-        selectedNodes.map(selectedData => {//[1,2,3]
+        selectedNodes.map(selectedData => { //[1,2,3]
             contractDetailNo.push(selectedData.data.contractDetailNo);
             contractType.push(selectedData.data.contractType);
             stockAmountUse.push(selectedData.data.stockAmountUse);
@@ -633,7 +633,7 @@
     });
 
     // O setup the grid after the page has finished loading
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => { //브라우저가 HTML을 전부 읽고 DOM 트리를 완성하는 즉시 발생
         new agGrid.Grid(myGrid, mpsGridOptions);
         new agGrid.Grid(myGrid2, processPlaneGridOptions);
     })

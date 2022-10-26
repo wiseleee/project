@@ -34,6 +34,7 @@ public class StockController {
 	@RequestMapping(value="/sto/list" , method=RequestMethod.GET)
 	public ModelMap searchStockList(HttpServletRequest request, HttpServletResponse response) {
 		map = new ModelMap();
+		System.out.println("요청");
 		try {
 			ArrayList<StockTO> stockList = stockService.getStockList();
 			

@@ -47,7 +47,7 @@
   	
   	<select id="selectDetailCodeList" parameterType="String" resultMap="codeDetailResult">
   		SELECT * FROM CODE_DETAIL WHERE DIVISION_CODE_NO LIKE #{divisionCode}
-  	</select>
+  	</select>                               <!-- LIKE = 일부만 같아도 들고온다-->
   	
   	
   	<insert id="insertDetailCode" parameterType="kr.co.seoulit.logistics.logiinfosvc.compinfo.to.CodeDetailTO">

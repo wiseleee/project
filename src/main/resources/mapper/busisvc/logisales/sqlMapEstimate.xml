@@ -157,7 +157,7 @@
 			{call P_SEQUENCE_INIT('EST_DETAIL_SEQ')}
 		]]>
 	</insert>
-	
+
 	<update id="reArrangeEstimateDetail" parameterType="map">
 		UPDATE ESTIMATE_DETAIL
 		SET	ESTIMATE_DETAIL_NO=replace(ESTIMATE_DETAIL_NO,substr(ESTIMATE_DETAIL_NO,instr(ESTIMATE_DETAIL_NO,'-')+1),#{newSeq})

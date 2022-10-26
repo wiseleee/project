@@ -110,7 +110,7 @@ public class ProductionServiceImpl implements ProductionService {
 		ArrayList<MpsTO> mpsTOList = new ArrayList<>();
 
 		MpsTO newMpsBean = null;
-
+//mps를 담은 arraylist를 내보냄
 		for (ContractDetailInMpsAvailableTO bean : contractDetailInMpsAvailableList) {
 
 			newMpsBean = new MpsTO();
@@ -172,7 +172,7 @@ public class ProductionServiceImpl implements ProductionService {
 		resultMap = batchMpsListProcess(mpsTOList);
 
 		return resultMap;
-
+//DB에 안갔다오는지?
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class ProductionServiceImpl implements ProductionService {
 			case "INSERT":
 
 				String newMpsNo = getNewMpsNo(bean.getMpsPlanDate());
-
+				//MPS번호생성
 				bean.setMpsNo(newMpsNo);
 
 				mpsMapper.insertMps(bean);
@@ -203,7 +203,7 @@ public class ProductionServiceImpl implements ProductionService {
 				if (bean.getContractDetailNo() != null) {
 
 					changeMpsStatusInContractDetail(bean.getContractDetailNo(), "Y");
-
+				//MPS TO수주상세번호가 존재하면 수주상세테이블에서 해당 번호의 MPS적용상태를 Y로 변경
 				} else if (bean.getSalesPlanNo() != null) {
 
 					changeMpsStatusInSalesPlan(bean.getSalesPlanNo(), "Y");
@@ -302,9 +302,9 @@ public class ProductionServiceImpl implements ProductionService {
 
 	@Override
 	public HashMap<String, Object> openMrp(ArrayList<String> mpsNoArr) {
-		
+		//클릭한 mps값은 배열
 		String mpsNoList = mpsNoArr.toString().replace("[", "").replace("]", "");
-	         
+		//ArrayList -> String으로 다시바꿈
         HashMap<String, Object> resultMap = new HashMap<String, Object>();
         
         HashMap<String, String> map = new HashMap<String, String>();
@@ -315,7 +315,7 @@ public class ProductionServiceImpl implements ProductionService {
         
         System.out.println(map);
 
-		resultMap.put("result", map.get("RESULT"));
+		resultMap.put("result", map.get("RESULT")); //프로시저의 out객체라 get으로 가져옴
 		resultMap.put("errorCode",map.get("ERROR_CODE"));
 		resultMap.put("errorMsg", map.get("ERROR_MSG"));
 		
@@ -405,7 +405,7 @@ public class ProductionServiceImpl implements ProductionService {
 	public ArrayList<MrpGatheringTO> getMrpGathering(ArrayList<String> mrpNoArr) {
 		
 		ArrayList<MrpGatheringTO> mrpGatheringList = null;
-
+		//mrp번호 배열 [mrp번호,mrp번호...] => "mrp번호,mrp번호..." 형식의 문자열로 변환
 		String mrpNoList = mrpNoArr.toString().replace("[", "").replace("]", "");
 		mrpGatheringList = mrpMapper.getMrpGathering(mrpNoList);
 
@@ -419,78 +419,78 @@ public class ProductionServiceImpl implements ProductionService {
 	    int seq=0;
 	    ArrayList<MrpGatheringTO> mrpGatheringList = null;
 		int i=1;
-	    List<MrpGatheringTO> list= mrpMapper.selectMrpGatheringCount(mrpGatheringRegisterDate);
-
+	    List<MrpGatheringTO> list= mrpMapper.selectMrpGatheringCount(mrpGatheringRegisterDate);//해당 소요량 취합결과 등록날짜에 이미 등록된 취합결과 검색하여 없으면 1, 있으면 최대값+1 리턴
+		//소요량 취합일자로 새로운 소요량 취합번호 확인
 		TreeSet<Integer> intSet = new TreeSet<>();
 		for(MrpGatheringTO bean : list) {
 			String mrpGatheringNo = bean.getMrpGatheringNo();
-			int no = Integer.parseInt(mrpGatheringNo.substring(mrpGatheringNo.length() - 2, mrpGatheringNo.length()));
-			intSet.add(no);
+			int no = Integer.parseInt(mrpGatheringNo.substring(mrpGatheringNo.length() - 2, mrpGatheringNo.length()));//substring 첫번째인자값:시작부분 지정, 두번째값:끝부분지정
+			intSet.add(no); //MrpGathering 일련번호에서 마지막 2자리 가져오기
 		}
 		if (!intSet.isEmpty()) {
-			i=intSet.pollLast() + 1;
+			i=intSet.pollLast() + 1;//가장높은번호+1
 		}
 
 	    HashMap<String, String> itemCodeAndMrpGatheringNoMap = new HashMap<>();
 
 	    StringBuffer newMrpGatheringNo = new StringBuffer();
 	    newMrpGatheringNo.append("MG"); 
-	    newMrpGatheringNo.append(mrpGatheringRegisterDate.replace("-", ""));
+	    newMrpGatheringNo.append(mrpGatheringRegisterDate.replace("-", ""));//(오늘날짜-xx)
 	    newMrpGatheringNo.append("-");
 	         
 	    seq=mrpMapper.getMGSeqNo();
 	         
-	    mrpGatheringList = getMrpGathering(mrpNoArr);
+	    mrpGatheringList = getMrpGathering(mrpNoArr); //소요량 취합결과를 ArrayList<MrpGatheringTO>로 리턴(행 모두를 가져옴)
 
 	    for (MrpGatheringTO bean : mrpGatheringList) { 
-	    	bean.setMrpGatheringNo(newMrpGatheringNo.toString() + String.format("%03d", i++));
-	    	bean.setStatus("INSERT");
-	    	bean.setMrpGatheringSeq(seq);
+	    	bean.setMrpGatheringNo(newMrpGatheringNo.toString() + String.format("%03d", i++));//MrpGathering 빈 객체에 MRP_MrpGathering_NO부여
+	    	bean.setStatus("INSERT");//MrpGathering 빈 객체에 상태를 INSERT로 부여
+	    	bean.setMrpGatheringSeq(seq);//MrpGathering 빈 객체에 MRP_GATHERING_SEQ부여
 
 	    	itemCodeAndMrpGatheringNoMap.put(bean.getItemCode(), bean.getMrpGatheringNo());
-	            
+			//MrpGathering 빈 객체에 {itemCode : mrpGatheringNo}
+			//ex)itemCodeAndMrpGatheringNoMap = {a:001, b:002, c:003...} mrpGathering을 한줄한줄 돌린다
 	    }
 
-	    resultMap = batchMrpGatheringListProcess(mrpGatheringList);
-
+	    resultMap = batchMrpGatheringListProcess(mrpGatheringList);//MRP_GATHERING테이블에 INSERT함(ArrayList<MrpGatheringTO>)의 모든 빈을 insert
+									//insert처리한 MrpGatheringTO객체->ArrayList에 MrpGatheringNO를 담고, Map에 {itemCode : mrpGatheringNo}를 담음
 	    TreeSet<String> mrpGatheringNoSet = new TreeSet<>();
 
 	    @SuppressWarnings("unchecked")
-	    HashMap<String, String> mrpGatheringNoList = (HashMap<String, String>) resultMap.get("INSERT_MAP");//key(ItemCode):value(소요량취합번호)
-	         
+	    HashMap<String, String> mrpGatheringNoList = (HashMap<String, String>) resultMap.get("INSERT_MAP");//key(ItemCode):value(소요량취합번호) map을 받아옴
 	    for (String mrpGatheringNo : mrpGatheringNoList.values()) {
 	    	
-	    	mrpGatheringNoSet.add(mrpGatheringNo);
-	            
+	    	mrpGatheringNoSet.add(mrpGatheringNo);//mrpGatheringNo 만을 TreeSet<String>에 담음
+	            //mrpGatheringNoSet={001,002,003...}
 	    }
 
-	    resultMap.put("firstMrpGatheringNo", mrpGatheringNoSet.pollFirst());
-	    resultMap.put("lastMrpGatheringNo", mrpGatheringNoSet.pollLast());
+	    resultMap.put("firstMrpGatheringNo", mrpGatheringNoSet.pollFirst());//최초 mrpGathering 번호를 결과 Map에 저장
+	    resultMap.put("lastMrpGatheringNo", mrpGatheringNoSet.pollLast());//마지막 mrpGathering 번호를 결과 Map에 저장
 
-	    for (String mrpNo : mrpNoAndItemCodeMap.keySet()) {
+	    for (String mrpNo : mrpNoAndItemCodeMap.keySet()) {//mrpNoAndItemCodeMap는 세번째 파라미터, 소요량 취합되지 않은 mrp의 {itemCode : mrpGatheringNo}
 	    	String itemCode = mrpNoAndItemCodeMap.get(mrpNo);
-	    	String mrpGatheringNo = itemCodeAndMrpGatheringNoMap.get(itemCode);
-	    	
+	    	String mrpGatheringNo = itemCodeAndMrpGatheringNoMap.get(itemCode);//mrpno-itemcode-mrpgatheringno순으로 찾음
+	    	//mrpno는 달라도 mrpGatheringNo는 같다
 	    	HashMap<String, String> map = new HashMap<>();
 
 	    	map.put("mrpNo", mrpNo);
 	    	map.put("mrpGatheringNo", mrpGatheringNo);
 	    	map.put("mrpGatheringStatus", "Y");
 	    	
-	    	mrpMapper.changeMrpGatheringStatus(map);
-	    }
+	    	mrpMapper.changeMrpGatheringStatus(map);//mrp테이블에서 해당 mrpno의 mrpgatheringno저장
+	    }//changeMrpGatheringStatus={0000001,0000002,0000003...}
 	         
 	    String mrpNoList = mrpNoArr.toString().replace("[", "").replace("]", "");
-
+		//mrp적용상태를 Y로 변경한 MRP번호들을 결과
 	    resultMap.put("changeMrpGatheringStatus", mrpNoList);
-
+		//changeMrpGatheringStatus=mrpno 모달창에 xx번~xx번까지 소요량 취합되었습니다. 때문에 구하는것
 	    StringBuffer sb = new StringBuffer();
 	 		
-	    for(String mrpGatheringNo : mrpGatheringNoList.values()) {
+	    for(String mrpGatheringNo : mrpGatheringNoList.values()) { //mrpGatheringNoList={001,002,003...}
 	    	sb.append(mrpGatheringNo);
 	    	sb.append(",");
 	    }
-	    sb.delete(sb.toString().length()-1, sb.toString().length());
+	    sb.delete(sb.toString().length()-1, sb.toString().length());//마지막에 붙은 ,가 잘려짐
 	    
 	    HashMap<String, String> parameter = new HashMap<>();
 	    parameter.put("mrpGatheringNo", sb.toString());
@@ -516,7 +516,7 @@ public class ProductionServiceImpl implements ProductionService {
 		newEstimateNo = new StringBuffer();
 		newEstimateNo.append("PS");
 		newEstimateNo.append(mpsPlanDate.replace("-", ""));
-		newEstimateNo.append(String.format("%02d", i)); //PS2020042401
+		newEstimateNo.append(String.format("%02d", i)); //PS2020042401 맨뒤2자리는 오늘 등록한 순서대로 번호
 
 		return newEstimateNo.toString();
 	}
@@ -552,7 +552,7 @@ public class ProductionServiceImpl implements ProductionService {
 		 ArrayList<String> updateList = new ArrayList<>();
 		 ArrayList<String> deleteList = new ArrayList<>();
 
-		 for (MrpGatheringTO bean : mrpGatheringTOList) {
+		 for (MrpGatheringTO bean : mrpGatheringTOList) { //소요량 취합결과 그리드에 뿌려진 데이터값
 		            
 			 String status = bean.getStatus();
 		            
@@ -563,9 +563,9 @@ public class ProductionServiceImpl implements ProductionService {
 			 			mrpMapper.insertMrpGathering(bean);
 		               
 			 			insertList.add(bean.getMrpGatheringNo());
-
+						//소요량 취합번호 추가
 			 			insertListMap.put(bean.getItemCode(), bean.getMrpGatheringNo());
-
+						//map에 key(ItemCode), value(MrpGatheringNo)
 			 			break;
 
 			 	case "UPDATE":

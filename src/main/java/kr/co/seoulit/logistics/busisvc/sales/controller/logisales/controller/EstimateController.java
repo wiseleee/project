@@ -74,10 +74,10 @@ public class EstimateController {
 	@RequestMapping(value="/estimate/new", method=RequestMethod.POST)
 	public ModelMap addNewEstimate(
 			@RequestParam("estimateDate") String estimateDate,
-			@RequestParam("newEstimateInfo") String newEstimateInfo
+			@RequestParam("newEstimateInfo") String newEstimateInfo //견적과 견적상세의 데이터값의 배열
 		) {
 		EstimateTO newEstimateTO = gson.fromJson(newEstimateInfo, EstimateTO.class);
-		
+		//newEstimateInfo는 뷰단에서 보낸 json문자열 - 문자열을 자바객체로 변환
 		map = new ModelMap();
 		
 		try {

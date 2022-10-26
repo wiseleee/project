@@ -245,9 +245,9 @@
         + "&endDate=" + endDate,
         true);
     xhr.setRequestHeader('Accept', 'application/json');
-    xhr.send();
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState == 4 && xhr.status == 200) {
+    xhr.send(); //서버에 요청
+    xhr.onreadystatechange = () => { //서버 응답 처리하기, 프로퍼티와 콜백함수
+      if (xhr.readyState == 4 && xhr.status == 200) { //요청 성공시
         let txt = xhr.responseText;
         txt = JSON.parse(txt);
         if (txt.gridRowJson == "") {
@@ -260,7 +260,7 @@
         console.log(txt);
         contractGridOptions.api.setRowData(txt.gridRowJson);
         txt.gridRowJson.map((unit, idx) => {
-          [].forEach.bind(unit.estimateDetailTOList)((val) => {    // [].forEach == Array.prototype.forEach
+          [].forEach.bind(unit.estimateDetailTOList)((val) => {    // [].forEach == Array.prototype.forEach  주어진 함수를 배열 요소 각각에 대해 실행
             estimateDetailList.push(val); // estDetailGrid에서 사용하기 위해 담음
           });
         });
@@ -268,8 +268,8 @@
     }
   });
   // o if customer modal hide, next cell
-  $("#listModal").on('hide.bs.modal', function () {
-    contractGridOptions.api.stopEditing();
+  $("#listModal").on('hide.bs.modal', function () { //	'hide.bs.modal' 모달이 닫힐 때 바로 실행되는 이벤트
+    contractGridOptions.api.stopEditing(); //셀 편집기가 그리드에 편집을 중지하도록 알리는 방법
     console.log("모달 더블클릭");
     if (contractRowNode != undefined) { // rowNode가 없는데 거래처 코드 탐색시 에러
       setDataOnCustomerName();
@@ -386,10 +386,10 @@
 
     return Datepicker;
   }
-  // O select estimateDetail
+  // O select estimateDetail 견적상세조회
   estimateDetailBtn.addEventListener("click", () => {
 	estDetailGridOptions.api.setRowData([]);
-    let selectedNodes = contractGridOptions.api.getSelectedNodes();
+    let selectedNodes = contractGridOptions.api.getSelectedNodes(); //클릭한행의 값 받아오기
     if (selectedNodes == "") {
       Swal.fire({
         position: "top",
@@ -404,7 +404,7 @@
     	console.log(selectedNodes[0].data);
 	    estimateDetailList.map((unit, idx) => {//이 부분을 수정 해야 하네..
 	        selectedNodes.forEach(function(e,i,c){
-	           if (unit.estimateNo == e.data.estimateNo) {
+	           if (unit.estimateNo == e.data.estimateNo) { // unit.estimateNo: "ES2022101545"
 	              addList.push(unit);
 	        }
 	      })
@@ -435,7 +435,7 @@
         title: '체크 항목',
         text: '선택한 행이 없습니다.',
       })
-      return;
+      return;//메서드 자체를 다 빠져나감, break는 if문만 빠져나감
     }
     // o No contractType
     //let newEstimateRowValue = selectedNodes[0].data;//아 data로 그냥 다 보내는구나. 그러면 이걸 for로 map에 담아서..보내면..
@@ -452,7 +452,6 @@
     
     let now = new Date();
     let today = now.getFullYear() + "-" + (now.getMonth() +1 ) + "-" +  now.getDate();
-    
     let noti = [];
     
     newEstimateRowValues.map(selectedData => {//[1,2,3]
@@ -462,17 +461,17 @@
        contractDate.push(today);
        customerCode.push(selectedData.data.customerCode);
        
-       if(selectedData.data.contractRequester != null)
+       if(selectedData.data.contractRequester != null)//수주요청자 필수 아님
           contractRequester.push(selectedData.data.contractRequester);
        else 
           contractRequester.push('null');
        
-       if(selectedData.data.discription != null)
+       if(selectedData.data.discription != null)//비고 필수 아님
           description.push(selectedData.data.discription);
        else
           discription.push('null');
        
-       noti.push(estimateNo);
+       noti.push(estimateNo);//배열이 selectedData갯수만큼 들어감
     });
     
     let resultArray={"estimateNo":estimateNo ,"contractType":contractType,"contractRequester":contractRequester,"personCodeInCharge":personCodeInCharge,"discription":discription,"contractDate":contractDate,"customerCode":customerCode};
@@ -490,7 +489,7 @@
     }
      Swal.fire({
       title: '수주 등록',
-      text:  noti[0] + "를 등록하시겠습니까?",
+      text:  noti[0] + "를 등록하시겠습니까?", //noti[0] : estimateNo : ES2022101545
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -509,7 +508,7 @@
       xhr.setRequestHeader('Accept', 'application/json');
       xhr.send();
       xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState == 4 && xhr.status == 200) { //정상적으로 작동할때
           // 초기화
           contractGridOptions.api.setRowData([]);
           estDetailGridOptions.api.setRowData([]);

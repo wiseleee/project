@@ -40,11 +40,12 @@
          $("#regist_board").submit();
       });
       
-      $("#regist_board").ajaxForm({
+      $("#registboard").ajaxForm({
          dataType: "json",
          success: function(data){ 
             alert(data.errorMsg);
-            location.href = "/logiinfo/boardList/view";
+           // location.href = "/logiinfo/boardList/view";
+            location.reload();
          }
       });   
    });

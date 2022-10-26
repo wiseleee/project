@@ -65,7 +65,7 @@
 	<select id="openMrp" parameterMap="openMrpParameter" statementType="CALLABLE">
 		<![CDATA[ {call P_MRP_OPEN(?,?,?,?)} ]]>
 	</select>
-	
+
 	<resultMap id="mrpNoResult" type="kr.co.seoulit.logistics.prodcsvc.production.to.MrpTO">
 		<result property="mrpNo" column="MRP_NO" />
 	</resultMap>
@@ -166,20 +166,20 @@
 		SELECT ORDER_OR_PRODUCTION_STATUS
 				,ITEM_CODE
 				,ITEM_NAME
-				,UNIT_OF_MRP_GATHERING		
+				,UNIT_OF_MRP_GATHERING
 				,CLAIM_DATE
 				,DUE_DATE
-				,SUM(NECESSARY_AMOUNT) AS NECESSARY_AMOUNT
+				,SUM(NECESSARY_AMOUNT) AS NECESSARY_AMOUNT /* CLAIM_DATE,DUE_DATE까지 같은 소요량 취합결과의 경우 해당 품목의 모든 필요수량의 합*/
 		FROM  (SELECT DECODE(item_classification,'원재료','구매','생산') AS ORDER_OR_PRODUCTION_STATUS 
 					,ITEM_CODE 
 					,TRIM(ITEM_NAME) AS ITEM_NAME 
 					,UNIT_OF_MRP AS UNIT_OF_MRP_GATHERING
-					,MIN(ORDER_DATE)      AS CLAIM_DATE 
-					,MIN(REQUIRED_DATE)   AS DUE_DATE 
-					,SUM(REQUIRED_AMOUNT) AS NECESSARY_AMOUNT
+					,MIN(ORDER_DATE)      AS CLAIM_DATE
+					,MIN(REQUIRED_DATE)   AS DUE_DATE /*가장먼저 만들어지는 해당부품 mrp의 작업완료기한을 DUE_DATE(발주 및 작업완료기한)로 함*/
+					,SUM(REQUIRED_AMOUNT) AS NECESSARY_AMOUNT /*해당부품의 필요량을 모두 더해 NECESSARY_AMOUNT(필요수량)을 구함*/
 					FROM   mrp
 					WHERE  mrp_gathering_no IS NULL
-					AND    MRP_NO IN ( WITH MRP_NO_STR AS
+					AND    MRP_NO IN ( WITH MRP_NO_STR AS /*문자열을 행으로 나눔*/
 					                    (SELECT #{mrpNoList} AS STR
 					                    FROM    DUAL)
 								            SELECT   TRIM(REGEXP_SUBSTR(MRP_NO_STR.STR,'[^,]+',1,LEVEL)) AS MRP_NO

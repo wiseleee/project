@@ -102,7 +102,7 @@
                      <div class="menuButton__selectCode">
                          <button class="search" id="customerList" data-toggle="modal"
                                     data-target="#listModal">거래처코드
-                         </button>
+                         </button> <%--품목코드, 단위코드, 거래처코드  data-target="#listModal"--%>
                      </div>
                  </div>
     </div>
@@ -212,8 +212,8 @@
       let days = 14; // 유효 일자는 현재일자 + 14일
       if (paramFmt == "dueDateOfEstimate") {
         _startDate = new Date(_startDate)
-        days = 9;
-        _startDate.setTime(_startDate.getTime() + days * 86400000);
+        days = 9; //이거 뭐지
+        _startDate.setTime(_startDate.getTime() + days * 86400000); //86400000??
         let dd = _startDate.getDate();
         let mm = _startDate.getMonth() + 1; //January is 0!
         let yyyy = _startDate.getFullYear();
@@ -250,13 +250,13 @@
     };
 
     // returns the new value after editing
-    Datepicker.prototype.getValue = function () {
+    Datepicker.prototype.getValue = function () { //값을얻는거
       console.log(this.eInput);
       return this.eInput.value;
     };
 
     // any cleanup we need to be done here
-    Datepicker.prototype.destroy = function () {
+    Datepicker.prototype.destroy = function () { //끝내는거
       estGridOptions.api.stopEditing();
     };
 
@@ -293,7 +293,7 @@
     },
     defaultColDef: {editable: false},
     overlayNoRowsTemplate: "추가된 견적이 없습니다.",
-    onGridReady: function (event) {// onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
+    onGridReady: function (event) { // onload 이벤트와 유사 ready 이후 필요한 이벤트 삽입한다.
       event.api.sizeColumnsToFit();
     },
     onGridSizeChanged: function (event) {
@@ -305,7 +305,7 @@
       }
     },
      getSelectedRowData() {
-      let selectedNodes = this.api.getSelectedNodes();
+      let selectedNodes = this.api.getSelectedNodes(); //getSelectedNodes : 선택한 노드 목록을 반환
       let selectedData = selectedNodes.map(node => node.data);
       return selectedData;
     },
@@ -402,8 +402,10 @@
         status: "INSERT"
       };
       estGridOptions.api.updateRowData({add: [row]});  // 위에서 받아온 값을 updateRowData에 추가시킨다. 이렇게 되면 agGrid의 형태가띄워지게 된다.
-    // 이 위까지는 견적추가 이벤트
-    } else if (event.id == "estimateDetailInsertButton") {    // 여기부터 견적상세추가버튼 이벤트가 실행
+    // 이 위
+
+    } else if (event.id == "" +
+        "estimateDetailInsertButton") {    // 여기부터 견적상세추가버튼 이벤트가 실행
       console.log(event.innerText);
       let estDate = estGridOptions.getSelectedRowData(); // 선택된 기존 setting 값
       console.log(estDate);
@@ -463,7 +465,7 @@
       selectedRows.forEach( function(selectedRow, index) {
         console.log(selectedRow);
    //     detailItemCode.splice(detailItemCode.indexOf(selectedRow.itemCode), 1); // 배열요소 제거
-        estDetailGridOptions.api.updateRowData({remove: [selectedRow]});
+        estDetailGridOptions.api.updateRowData({remove: [selectedRow]}); //그리드 삭제
       });
     }
   }
@@ -472,14 +474,15 @@
   // o ListModal Click 
   
   customerList.addEventListener('click', () => { // customerList 을 클릭했을 때 실행되는 메서드
-         getListData("CL-01"); // ()안에 있는 값을 인자값으로 들고 getListData메서드를 찾으러 출발~
+      //console.log("123123123???");
+      getListData("CL-01"); // ()안에 있는 값을 인자값으로 들고 getListData메서드를 찾으러 출발~
           $("#listModalTitle").text("CUSTOMER CODE");
   });
 
 
   itemList.addEventListener('click', () => {
-   getListData("IT-_I");  // IT-_1 을 인자값으로 들고 출발
-    $("#listModalTitle").text("ITEM CODE");
+   getListData("IT-_I");  // IT-_I(I로 끝나는 것) 을 인자값으로 들고 출발
+    $("#listModalTitle").text("ITEM CODE"); //listModal.tag파일에 #listModalTitle 있음
   });
   
   unitList.addEventListener('click', () => {
@@ -491,7 +494,7 @@
     console.log(itemRowNode);
     if (itemRowNode == undefined) {return;}
     if (itemRowNode.data.itemCode != undefined) {
-      getStandardUnitPrice(itemRowNode.data.itemCode, "EA"); // BOX이면
+      getStandardUnitPrice(itemRowNode.data.itemCode, "EA"); // modal.js로 메서드 찾으러감
     }
   });
   //--------------------------------------------------------------------------------------------
@@ -501,7 +504,7 @@
      if( $("#listModalTitle").text() == "CUSTOMER CODE"){
           
           estGridOptions.api.stopEditing();
-          let rowNode = estGridOptions.api.getRowNode(datepicker.value);
+          let rowNode = estGridOptions.api.getRowNode(datepicker.value);//getRowNode:몇번째 노드인지 알려줌
           console.log("rowNode:" + rowNode);
           if (rowNode != undefined) { // rowNode가 없는데 거래처 코드 탐색시 에러
             setDataOnCustomerName();
@@ -517,7 +520,7 @@
   function setDataOnCustomerName() {
     let rowNode = estGridOptions.api.getRowNode(datepicker.value);
     let to = transferVar();
-    rowNode.setDataValue("customerName", to.detailCodeName);
+    rowNode.setDataValue("customerName", to.detailCodeName);//setDataValue:셋팅
     rowNode.setDataValue("customerCode", to.detailCode);
     let newData = rowNode.data;
     rowNode.setData(newData);
@@ -560,7 +563,7 @@
                 existingData = {"detailCode":itemRowNode.data.itemCode, "detailCodeName":itemRowNode.data.itemName};
              }
         }
-        to = existingData;
+        to = existingData; //여기서 to에 값을 셋팅해서 523~524줄 to.detailCodeName,to.detailCode에서 값을 들고옴
      });  
   
   $("#amountModal").on('show.bs.modal', function () {
@@ -591,7 +594,7 @@
   // 일괄저장 <= 선택된 항목만 저장
   batchSaveButton.addEventListener("click", () => {  //일괄저장에 걸려있는  id이름에 걸린 이벤트 처리 시즈악 !
     let newEstimateRowValue = estGridOptions.getSelectedRowData(); // '견적추가'그리드 배열 리턴 받음
-    console.log(newEstimateRowValue); //
+    console.log(newEstimateRowValue);
     let selectedRows = estDetailGridOptions.api.getSelectedRows();      // '견적상세추가'그리드 배열 리턴 받음
     if(selectedRows.length==0){ // 에러처리
        Swal.fire({
@@ -638,7 +641,7 @@
     newEstimateRowValue.estimateDetailTOList = selectedRows;    // 여기 코드가 이상해서 이 부분만 보면 될 듯
     //console.log('@@@@@@@@@@@@ HERE!!!@@@@@@@@@@@@@')
     console.log(newEstimateRowValue.estimateDetailTOList);
-                                                                                                                      // *** 상세추가그리드 부분을 estimateDetailTOList에 담아서 위의 추가 그리드에 합쳐준 다음 일괄저장으로 같이 데이터를 넘겨준다고 생각하면 된다. ***
+         // *** 상세추가그리드 부분을 estimateDetailTOList에 담아서 위의 추가 그리드에 합쳐준 다음 일괄저장으로 같이 데이터를 넘겨준다고 생각하면 된다. ***
     newEstimateRowValue = JSON.stringify(newEstimateRowValue);  // 받아온 값들을 JSON형태로 바꾸어준다고 생각=> 문자열로 변환
     Swal.fire({
       title: "견적을 등록하시겠습니까?",
@@ -648,15 +651,15 @@
       cancelButtonColor: '#d33',
       cancelButtonText: '취소',
       confirmButtonText: '확인',
-    }).then( (result) => {  // 위 SWAL창이 뜬 다음
-      if (result.isConfirmed) {  //결과가 컨펌이 되었을 경우
-      let xhr = new XMLHttpRequest();  
-      xhr.open('POST', "${pageContext.request.contextPath}/logisales/estimate/new?method=addNewEstimate&estimateDate=" // 위의 값들을 addNewEstimate.do를 호출시켜서 던질거임
-          + datepicker.value + "&newEstimateInfo=" + encodeURI(newEstimateRowValue),
+         }).then( (result) => {  // 위 SWAL창이 뜬 다음
+            if (result.isConfirmed) {  //결과가 컨펌이 되었을 경우
+             let xhr = new XMLHttpRequest();
+             xhr.open('POST', "${pageContext.request.contextPath}/logisales/estimate/new?method=addNewEstimate&estimateDate=" // 위의 값들을 addNewEstimate.do를 호출시켜서 던질거임
+          + datepicker.value + "&newEstimateInfo=" + encodeURI(newEstimateRowValue), //한행을 문자열로 인코딩해서 보냄
           true);
-      xhr.setRequestHeader('Accept', 'application/json');// (헤더이름,헤더값) HTTP요청 헤더에 포함하고자 하는 헤더 이름과 그 값인데 전에 무조건 open()뒤에는 send()메소드를 써주어야 한다.
-      xhr.send();
-      xhr.onreadystatechange = () => {  //callback함수 사용
+         xhr.setRequestHeader('Accept', 'application/json');// (헤더이름,헤더값) HTTP요청 헤더에 포함하고자 하는 헤더 이름과 그 값인데 전에 무조건 open()뒤에는 send()메소드를 써주어야 한다.
+         xhr.send();
+         xhr.onreadystatechange = () => {  //callback함수 사용
         if (xhr.readyState == 4 && xhr.status == 200) { // 숫자값에 따라 처리상태가 달라지는 것. xhr.readyState == 4 : 데이터를 전부 받은 상태,완료되었다.xhr.status == 200 : 서버로부터의 응답상태가 요청에 성공하였다는 의미.
           // 초기화 
           estGridOptions.api.setRowData([]);

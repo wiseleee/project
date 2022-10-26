@@ -438,6 +438,7 @@
 		//삭제 기능 *****************************************************************
 		function deleteRow(event) {
 			//삭제 기능 : 창고 삭제
+			console.log(event.id);
 			if (event.id == "warehouseDeleteButton") {
 				let selected = whGridOptions.api.getFocusedCell();
 				if (selected == undefined) {

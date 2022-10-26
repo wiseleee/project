@@ -234,8 +234,8 @@
 			   CD.DESCRIPTION
 			   FROM contract_detail CD,CONTRACT C 
 			   WHERE C.CONTRACT_NO = cd.contract_no
-			   AND PROCESSING_STATUS IS NULL
-			   AND operation_completed_status IS NULL
+			   AND PROCESSING_STATUS IS NULL--mps처리여부
+			   AND operation_completed_status IS NULL--작업완료여부
 			<if test='searchCondition=="contractDate"'>
                AND TO_DATE(C.CONTRACT_DATE,'YYYY-MM-DD') BETWEEN TO_DATE(#{startDate},'YYYY-MM-DD') AND TO_DATE(#{endDate},'YYYY-MM-DD')
             </if>

@@ -116,6 +116,7 @@ public class CodeController {
 			map.put("detailCodeList", detailCodeList);
 			map.put("errorCode", 1);
 			map.put("errorMsg", "성공");
+			System.out.println("detailCodeList?"+detailCodeList);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 			map.put("errorCode", -1);

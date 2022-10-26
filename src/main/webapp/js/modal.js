@@ -12,7 +12,7 @@ let warehousingGrid = document.querySelector("#warehousingGrid");
 let workOrderSimulationGrid = document.querySelector("#workOrderSimulationGrid");
 let workSiteSituationGrid = document.querySelector("#workSiteSituationGrid");
 let to;                      // 전달 변수
-let transferVar = () => to;  // 전달 함수
+let transferVar = () => to;  // 전달 함수 / 이거 무슨말이지
 let isElement = []; 
 
 // O Common GridOptions
@@ -28,17 +28,17 @@ const gridOptions = {
 };
 
 // O Get ajax Data  FROM (TABLE) DETAIL_CODE
-const getListData = (divisionCodeNo) => {
+const getListData = (divisionCodeNo) => { //code_detail테이블에서 divisionCodeNo 갖고옴
     let xhr = new XMLHttpRequest();
     xhr.open('POST',
         '/compinfo/codedetail2/list?method=findDetailCodeList&divisionCodeNo='+divisionCodeNo,
-        true);
+        true);//divisionCodeNo 파라미터 값으로 넘김
     xhr.setRequestHeader('Accept', 'application/json');
-    xhr.send();
+    xhr.send(); //xhr : 서버에 보낸다
     xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState == 4 && xhr.status == 200) { //정상적으로 가동이 되었따
             let txt = xhr.responseText;
-            jsonData = JSON.parse(txt);
+            jsonData = JSON.parse(txt); //화면에다 뿌릴 리스트정보
             console.log("**********************");
             console.log(jsonData);
             if (jsonData.errorCode != 1) {
@@ -90,11 +90,11 @@ const setListModal = () => {
 	if(listGrid!=null){
 		listGrid.innerHTML="";
     	new agGrid.Grid(listGrid, listGridOptions);
-		listGridOptions.api.setRowData(jsonData.detailCodeList); 
+		listGridOptions.api.setRowData(jsonData.detailCodeList);
 	}
 };
 // O Get StandardUnitPrice
-const getStandardUnitPrice = (itemCode, unit) => {
+const getStandardUnitPrice = (itemCode, unit) => { //getStandardUnitPrice(itemRowNode.data.itemCode, "EA")여기서 파라미터값 전달
     console.log(itemCode);
     let xhr = new XMLHttpRequest();
     // BOX
@@ -107,7 +107,7 @@ const getStandardUnitPrice = (itemCode, unit) => {
         if (xhr.readyState == 4 && xhr.status == 200) {
             let txt = xhr.responseText
             jsonData = JSON.parse(txt);
-            console.log(jsonData);
+            console.log(jsonData);//해당품목의 EA(개)당가격
             document.querySelector("#unitPriceOfEstimateBox").value = jsonData.gridRowJson;
             if (jsonData.errorCode != 1) {
                 swal({
@@ -159,7 +159,7 @@ const getMpsList = () => {
     let fromDate = document.querySelector("#fromDate");
     let toDate = document.querySelector("#toDate");
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', '/production/mps/list' +
+    xhr.open('GET', '/production/mps/list' +//영상엔 메서드방식 POST라 되있음
         "?method=searchMpsInfo"
         + "&startDate=" + fromDate.value
         + "&endDate=" + toDate.value
@@ -213,14 +213,14 @@ const setMrpModal = () => {
 // o get Mrp data
 let mpsRowNodes;
 let mpsNoList;
-const getMrpList = (mpsRowNode) => {
+const getMrpList = (mpsRowNode) => { // mpsRowNode : 선택한 로우 객체 (전역변수)
     mrpGridOptions.api.setRowData([]);
     let xhr = new XMLHttpRequest();
 	mpsRowNodes=mpsRowNode;
 	mpsNoList = [];
 	console.log(mpsRowNode);
 	for(let i=0;i<mpsRowNode.length;i++){
-		mpsNoList.push(mpsRowNode[i].data.mpsNo);
+		mpsNoList.push(mpsRowNode[i].data.mpsNo); //mpsNo "PS2022101901"
 	}
     console.log(mpsNoList);
     xhr.open('GET', '/production/mrp/open' +
@@ -364,7 +364,7 @@ const getMrpGatheringModal = (mrpNoList) => {  // 소요량취합결과 데이�
         }
     }
 }
-const registerMrpGathering = (mrpGatheringDate, mrpNoList, mrpNoAndItemCodeList) => {
+const registerMrpGathering = (mrpGatheringDate, mrpNoList, mrpNoAndItemCodeList) => {//취합결과등록날짜, 소요량 취합되지 않은 mrp의 mrp_no, 소요량 취합되지 않은 mrp의 {mrpNO:ItemCode}
     let xhr = new XMLHttpRequest();
     //let mrpGatheringList = JSON.stringify(jsonData.gridRowJson); // 소요량취합결과 데이터 
     mrpNoList = JSON.stringify(mrpNoList); // 소요량취합되지 않은 mrpno 목록
